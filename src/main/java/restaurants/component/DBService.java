@@ -8,8 +8,10 @@ import restaurants.model.Restaurant;
 import restaurants.model.Table;
 
 public interface DBService {
+	public Restaurant createRestaurant();
 	public Restaurant getRestaurant(int id);
 	
+	public Table createTable(int restaurantId,int capacity);
 	public Table getTable(int id);
 	public List<Table> getTables(int restaurantId);
 	
