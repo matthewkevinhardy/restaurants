@@ -5,15 +5,15 @@ import java.util.List;
 
 import restaurants.model.Reservation;
 import restaurants.model.Restaurant;
-import restaurants.model.Table;
+import restaurants.model.RestaurantTable;
 
 public interface DBService {
 	public Restaurant createRestaurant();
 	public Restaurant getRestaurant(int id);
 	
-	public Table createTable(int restaurantId,int capacity);
-	public Table getTable(int id);
-	public List<Table> getTables(int restaurantId);
+	public RestaurantTable createTable(int restaurantId,int capacity);
+	public RestaurantTable getTable(int id);
+	public List<RestaurantTable> getTables(int restaurantId);
 	
 	public Reservation getReservation(int id);
 	public List<Reservation> getReservations(int restaurantId,Date start,Date end);

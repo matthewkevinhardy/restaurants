@@ -1,30 +1,47 @@
 package restaurants.model;
 
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
+
+@Entity
+@Table(name = "RESTAURANT")
 public class Restaurant {
+	
+	@Id
+	@Column(name = "RESTAURANT_ID")
+	@GeneratedValue
 	private int restaurantId;
-	private List<Table> tables;
-	private List<Reservation> reservations;
 	
-	public Restaurant(int id) {
-		this.restaurantId = id;
+	@Column(name = "RESTAURANT_NAME")
+	private String name;
+	
+	public Restaurant() {
 	}
 	
-	public List<Table> getTables() {
-		return tables;
+	public Restaurant(String name) {
+		this.name = name;
 	}
-	public void setTables(List<Table> tables) {
-		this.tables = tables;
-	}
+
 	public int getRestaurantId() {
 		return restaurantId;
 	}
-	public List<Reservation> getReservations() {
-		return reservations;
+
+	public void setRestaurantId(int restaurantId) {
+		this.restaurantId = restaurantId;
 	}
-	public void setReservations(List<Reservation> reservations) {
-		this.reservations = reservations;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	
