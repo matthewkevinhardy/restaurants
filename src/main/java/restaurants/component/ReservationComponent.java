@@ -10,6 +10,8 @@ public interface ReservationComponent {
 
 	public Reservation save(Reservation reservation);
 
+	public Reservation update(Reservation reservation);
+	
 	public List<Reservation> findByIdDate(int restaurantId,LocalDateTime start,LocalDateTime end);
 	
 	public void delete(int reservationId);

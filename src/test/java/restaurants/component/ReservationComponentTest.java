@@ -162,7 +162,7 @@ class ReservationComponentTest {
 			fail(e);
 		}
 	}
-	
+
 	@Test
 	void testInvalidReservation() {
 		try {
@@ -170,6 +170,45 @@ class ReservationComponentTest {
 
 			assertThrows(ReservationException.class, () -> reservationComponent
 					.save(new Reservation(insertTable5.getTableId(), now.plusMinutes(15), now.plusMinutes(10))));
+
+		} catch (Exception e) {
+			fail(e);
+		}
+	}
+
+	@Test
+	void testUpdateReservation() {
+		try {
+			LocalDateTime now = LocalDateTime.now();
+
+			Reservation saved = reservationComponent
+					.save(new Reservation(insertTable6.getTableId(), now.plusMinutes(10), now.plusMinutes(15)));
+
+			LocalDateTime newEnd = now.plusMinutes(30);
+
+			saved.setEnd(newEnd);
+			reservationComponent.update(saved);
+
+			assertEquals(newEnd, reservationComponent.getReservation(saved.getReservationId()).getEnd());
+
+		} catch (Exception e) {
+			fail(e);
+		}
+	}
+
+	@Test
+	void testInvalidUpdate() {
+		try {
+			LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+
+			Reservation saved = reservationComponent.save(
+					new Reservation(insertTable6.getTableId(), tomorrow.plusMinutes(10), tomorrow.plusMinutes(20)));
+			reservationComponent.save(
+					new Reservation(insertTable6.getTableId(), tomorrow.plusMinutes(40), tomorrow.plusMinutes(50)));
+
+			saved.setStart(tomorrow.plusMinutes(30));
+			saved.setEnd(tomorrow.plusMinutes(45));
+			assertThrows(ReservationException.class,()->reservationComponent.update(saved));
 
 		} catch (Exception e) {
 			fail(e);

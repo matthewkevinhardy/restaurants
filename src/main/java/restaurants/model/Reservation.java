@@ -69,6 +69,25 @@ public class Reservation {
 	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
+
+	@Override
+	public int hashCode() {
+		return reservationId;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Reservation other = (Reservation) obj;
+		if (reservationId != other.reservationId)
+			return false;
+		return true;
+	}
 	
 	
 }

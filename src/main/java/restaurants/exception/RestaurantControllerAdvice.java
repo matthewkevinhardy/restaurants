@@ -29,7 +29,7 @@ public class RestaurantControllerAdvice {
 	
 	@ExceptionHandler(ReservationException.class)
 	public ResponseEntity<ErrorResponse> handleReservationException(ReservationException e,HttpServletRequest request) {
-		return error(HttpStatus.NOT_FOUND,e,request);
+		return error(HttpStatus.BAD_REQUEST,e,request);
 	}
 	
 	private ResponseEntity<ErrorResponse> error(HttpStatus status, Exception e,HttpServletRequest request) {

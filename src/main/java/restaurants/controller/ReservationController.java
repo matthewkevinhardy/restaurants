@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +41,13 @@ public class ReservationController {
 		return saved;
 	}
 
+	@ApiOperation(value = "Update a reservation")
+	@PutMapping(path = "/reservation/update")
+	public Reservation update(final @RequestBody Reservation reservation) {
+		Reservation updated = reservationComponent.update(reservation);
+		return updated;
+	}
+	
 	@ApiOperation(value = "Get reservations for restaurant and date")
 	@ApiModelProperty(name = "start",value="yyyy-MM-dd HH:mm")
 	@GetMapping(path = "/restaurant/{restaurantId}/reservations")

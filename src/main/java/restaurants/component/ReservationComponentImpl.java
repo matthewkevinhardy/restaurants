@@ -39,6 +39,34 @@ public class ReservationComponentImpl implements ReservationComponent {
 		return reservation;
 	}
 
+	public Reservation update(Reservation reservation) {
+		
+		if(reservation.getStart().isBefore(LocalDateTime.now())) {
+			throw new ReservationException("Reservation in the past, start: "+reservation.getStart());
+		}
+		
+		if(reservation.getEnd().isBefore(reservation.getStart())) {
+			throw new ReservationException("Reservation back-to-front!");
+		}
+		
+		List<Reservation> clashList = reservationRepository.findByTableIdAndDateRange(reservation.getTableId(), reservation.getStart(),
+				reservation.getEnd()).get();
+		
+		if(clashList.isEmpty()) {
+			// No clashes
+		}
+		else if(clashList.size()==1 && clashList.contains(reservation)) {
+			// Only clash is the record we want to update
+		}
+		else {
+			// Clashes
+			throw new ReservationException("Reservation clash!");
+		}
+		
+		Reservation updated = reservationRepository.save(reservation);
+		return updated;
+	}
+	
 	public List<Reservation> findByIdDate(int restaurantId, LocalDateTime start, LocalDateTime end) {
 		List<Reservation> reservations = reservationRepository.findByRestaurantIdAndDateRange(restaurantId, start, end)
 				.orElseThrow(() -> new NotFoundException("No reservations found for restaurantId:" + restaurantId+" and start:"+start+" and end:"+end));

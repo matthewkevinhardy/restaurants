@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import restaurants.component.TableComponentImpl;
-import restaurants.dao.RestaurantRepository;
-import restaurants.dao.RestaurantTableRepository;
-import restaurants.exception.NotFoundException;
-import restaurants.model.Restaurant;
 import restaurants.model.RestaurantTable;
 
 @RestController
