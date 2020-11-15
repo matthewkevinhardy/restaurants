@@ -23,7 +23,12 @@ public class RestaurantControllerAdvice {
 	}
 	
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ErrorResponse> handleResourceNotFoundException(NotFoundException e,HttpServletRequest request) {
+	public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e,HttpServletRequest request) {
+		return error(HttpStatus.NOT_FOUND,e,request);
+	}
+	
+	@ExceptionHandler(ReservationException.class)
+	public ResponseEntity<ErrorResponse> handleReservationException(ReservationException e,HttpServletRequest request) {
 		return error(HttpStatus.NOT_FOUND,e,request);
 	}
 	

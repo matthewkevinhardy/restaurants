@@ -26,39 +26,37 @@ import restaurants.model.RestaurantTable;
 public class RestaurantController {
 	
 	@Autowired
-    private RestaurantRepository restaurantRepository;
+    private RestaurantController restaurantController;
 	
 	@ApiOperation(value = "Get a restaurant")
 	@GetMapping(path = "/restaurant/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Restaurant getRestaurant(@PathVariable(value = "id",required = true) Integer id) {
-		return restaurantRepository.findById(id).orElseThrow(()->new NotFoundException("Restaurant:"+id));
+		return restaurantController.getRestaurant(id);
 	}
 	
 	@ApiOperation(value = "Get all restaurants")
 	@GetMapping(path = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Restaurant> getRestaurants() {
-		List<Restaurant> resList = new LinkedList<Restaurant>();
-		restaurantRepository.findAll().forEach(resList::add);
-		return resList;
+		return restaurantController.getRestaurants();
 	}
 	
 	@ApiOperation(value = "Add a restaurant")
 	@PostMapping(path = "/restaurant/save")
 	public Restaurant save(final @RequestBody Restaurant restaurant) {
-		Restaurant saved = restaurantRepository.save(restaurant);
+		Restaurant saved = restaurantController.save(restaurant);
 		return saved;
 	}
 	
 	@ApiOperation(value = "Update a restaurant")
 	@PutMapping(path = "/restaurant/update")
 	public Restaurant update(final @RequestBody Restaurant restaurant) {
-		Restaurant saved = restaurantRepository.save(restaurant);
+		Restaurant saved = restaurantController.save(restaurant);
 		return saved;
 	}
 	
 	@ApiOperation(value = "Delete a restaurant")
 	@DeleteMapping(path = "/restaurant/{id}")
 	public void delete(@PathVariable(value = "id", required = true) int id) {
-		restaurantRepository.deleteById(id);
+		restaurantController.delete(id);
 	}
 }

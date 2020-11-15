@@ -25,7 +25,7 @@ public class ReservationComponentImpl implements ReservationComponent {
 	public Reservation save(Reservation reservation) {
 		
 		if(reservation.getStart().isBefore(LocalDateTime.now())) {
-			throw new ReservationException("Reservation in the past!");
+			throw new ReservationException("Reservation in the past, start: "+reservation.getStart());
 		}
 		
 		if(reservation.getEnd().isBefore(reservation.getStart())) {
