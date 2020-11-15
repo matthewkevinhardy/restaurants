@@ -13,11 +13,17 @@ import restaurants.model.Reservation;
 
 @Repository
 public interface ReservationRepository extends CrudRepository<Reservation, Integer> {
-	public Optional<Reservation> findById(int id);
+	public Optional<Reservation> findByReservationId(int id);
 
 	@Query("SELECT rvn FROM Reservation rvn,RestaurantTable tab "
 			+ "WHERE rvn.tableId=tab.tableId AND tab.restaurantId=:restaurantId "
-			+ "AND rvn.start>:start AND rvn.end<:end")
-	public Optional<List<Reservation>> findByRestaurantIdAndDate(@Param("restaurantId") int restaurantId,
+			+ "AND rvn.start<:end AND rvn.end>:start")
+	public Optional<List<Reservation>> findByRestaurantIdAndDateRange(@Param("restaurantId") int restaurantId,
+			@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+	
+	@Query("SELECT rvn FROM Reservation rvn "
+			+ "WHERE rvn.tableId=:tableId "
+			+ "AND rvn.start<:end AND rvn.end>:start")
+	public Optional<List<Reservation>> findByTableIdAndDateRange(@Param("tableId") int tableId,
 			@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

@@ -3,8 +3,8 @@ package restaurants.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,7 +13,7 @@ public class RestaurantTable {
 	
 	@Id
 	@Column(name = "TABLE_ID")
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int tableId;
 	
 	@Column(name = "SEATING_CAPACITY")
@@ -47,9 +47,6 @@ public class RestaurantTable {
 //		this.restaurant = restaurant;
 //	}
 	
-	public void setTableId(int tableId) {
-		this.tableId = tableId;
-	}
 	public void setSeatingCapacity(int seatingCapacity) {
 		this.seatingCapacity = seatingCapacity;
 	}

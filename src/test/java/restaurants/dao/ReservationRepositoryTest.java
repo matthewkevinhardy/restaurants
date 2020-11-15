@@ -74,7 +74,7 @@ class ReservationRepositoryTest {
 		LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59));
 
 		List<Reservation> reservations = reservationRespository
-				.findByRestaurantIdAndDate(insertRestaurant1.getRestaurantId(), start, end).get();
+				.findByRestaurantIdAndDateRange(insertRestaurant1.getRestaurantId(), start, end).get();
 
 		assertEquals(3, reservations.size());
 	}

@@ -28,12 +28,12 @@ class RestaurantTableRepositoryTest {
 		RestaurantTable insertTable1 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant1.getRestaurantId()));
 		RestaurantTable insertTable2 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant2.getRestaurantId()));
 		
-		RestaurantTable getRestaurantTable1 = restaurantTableRepository.findById(insertTable1.getTableId());
+		RestaurantTable getRestaurantTable1 = restaurantTableRepository.findById(insertTable1.getTableId()).get();
 		assertNotNull(getRestaurantTable1);
 		assertEquals(insertTable1.getTableId(), getRestaurantTable1.getTableId());
 		assertEquals(6, getRestaurantTable1.getSeatingCapacity());
 		
-		RestaurantTable getRestaurantTable2 = restaurantTableRepository.findById(insertTable2.getTableId());
+		RestaurantTable getRestaurantTable2 = restaurantTableRepository.findById(insertTable2.getTableId()).get();
 		assertNotNull(getRestaurantTable2);
 		assertEquals(insertTable2.getTableId(), getRestaurantTable2.getTableId());
 		assertEquals(6, getRestaurantTable2.getSeatingCapacity());

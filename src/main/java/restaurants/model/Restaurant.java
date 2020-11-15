@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "RESTAURANT")
@@ -15,7 +17,7 @@ public class Restaurant {
 	
 	@Id
 	@Column(name = "RESTAURANT_ID")
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int restaurantId;
 	
 	@Column(name = "RESTAURANT_NAME")
@@ -30,10 +32,6 @@ public class Restaurant {
 
 	public int getRestaurantId() {
 		return restaurantId;
-	}
-
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
 	}
 
 	public String getName() {
