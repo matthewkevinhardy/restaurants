@@ -61,6 +61,9 @@ public class ReservationComponentImpl implements ReservationComponent {
 			throw new ReservationException("Reservation back-to-front!");
 		}
 
+		reservationRepository.findByReservationId(reservation.getReservationId())
+				.orElseThrow(() -> new NotFoundException("Reservation: " + reservation.getReservationId()));
+
 		List<ReservationDTO> clashList = reservationRepository.findByTableIdAndDateRange(reservationDTO.getTableId(),
 				reservationDTO.getStart(), reservationDTO.getEnd()).get();
 

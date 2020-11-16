@@ -2,9 +2,7 @@ package restaurants.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,6 +52,10 @@ public class Reservation {
 	
 	public Integer getReservationId() {
 		return reservationId;
+	}
+	
+	public void setReservationId(Integer reservationId) {
+		this.reservationId = reservationId;
 	}
 	
 	public Integer getTableId() {

@@ -12,10 +12,10 @@ import restaurants.model.RestaurantTable;
 
 @Component
 public class TableComponentImpl implements TableComponent {
-	
+
 	@Autowired
 	private RestaurantTableRepository restaurantTableRepository;
-	
+
 	public RestaurantTable getTable(int id) {
 		return restaurantTableRepository.findById(id).orElseThrow(() -> new NotFoundException("Table id:" + id));
 	}
@@ -29,17 +29,20 @@ public class TableComponentImpl implements TableComponent {
 		return restaurantTableRepository.findByRestaurantId(restaurantId)
 				.orElseThrow(() -> new NotFoundException("RestaurantId:" + restaurantId));
 	}
-	
-	public List<RestaurantTable> findFreeTables(int restaurantId,int seatingCapacity,LocalDateTime startTime,LocalDateTime endTime) {
+
+	public List<RestaurantTable> findFreeTables(int restaurantId, int seatingCapacity, LocalDateTime startTime,
+			LocalDateTime endTime) {
 		return restaurantTableRepository.findFreeTables(restaurantId, seatingCapacity, startTime, endTime)
 				.orElseThrow(() -> new NotFoundException("No free tables:" + restaurantId));
 	}
-	
+
 	public void delete(int id) {
 		restaurantTableRepository.deleteById(id);
 	}
-	
+
 	public RestaurantTable update(RestaurantTable restaurantTable) {
+		restaurantTableRepository.findByRestaurantId(restaurantTable.getTableId())
+				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurantTable.getTableId()));
 		RestaurantTable saved = restaurantTableRepository.save(restaurantTable);
 		return saved;
 	}

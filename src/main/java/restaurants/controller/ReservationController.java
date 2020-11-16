@@ -41,14 +41,16 @@ public class ReservationController {
 
 	@ApiOperation(value = "Add a reservation")
 	@PostMapping(path = "/reservation/save")
+	@ResponseStatus(code = HttpStatus.CREATED)
 	public Reservation save(@Valid @RequestBody Reservation reservation) {
 		Reservation saved = reservationComponent.save(reservation);
 		return saved;
 	}
 
 	@ApiOperation(value = "Update a reservation")
-	@PutMapping(path = "/reservation/update")
-	public Reservation update(@Valid @RequestBody Reservation reservation) {
+	@PutMapping(path = "/reservation/{reservationId}/update")
+	public Reservation update(@Valid @RequestBody Reservation reservation,@PathVariable(value = "reservationId", required = true) Integer reservationId) {
+		reservation.setReservationId(reservationId);
 		Reservation updated = reservationComponent.update(reservation);
 		return updated;
 	}

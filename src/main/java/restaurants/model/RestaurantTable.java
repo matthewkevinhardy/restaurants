@@ -38,6 +38,10 @@ public class RestaurantTable {
 	public RestaurantTable() {
 	}
 	
+	public void setTableId(Integer tableId) {
+		this.tableId=tableId;
+	}
+	
 	public int getTableId() {
 		return tableId;
 	}

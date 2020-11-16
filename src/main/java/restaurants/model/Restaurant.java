@@ -29,10 +29,14 @@ public class Restaurant {
 	}
 	
 	public Restaurant(String name) {
-		this.name = name;
+		this.name=name;
 	}
-
-	public int getRestaurantId() {
+	
+	public void setRestaurantId(Integer restaurantId) {
+		this.restaurantId=restaurantId;
+	}
+	
+	public Integer getRestaurantId() {
 		return restaurantId;
 	}
 
