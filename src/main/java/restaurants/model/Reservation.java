@@ -21,12 +21,12 @@ public class Reservation {
 	@NotNull(message = "tableId is mandatory")
 	private Integer tableId;
 	
-	@NotBlank(message = "start is mandatory")
+	@NotNull(message = "start is mandatory")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
 	private LocalDateTime start;
 	
-	@NotBlank(message = "end is mandatory")
+	@NotNull(message = "end is mandatory")
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
 	private LocalDateTime end;

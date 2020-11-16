@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import restaurants.component.ReservationComponent;
 import restaurants.model.Reservation;
 
@@ -49,17 +52,16 @@ public class ReservationController {
 		Reservation updated = reservationComponent.update(reservation);
 		return updated;
 	}
-	
+
 	@ApiOperation(value = "Get reservations for restaurant and date")
-	@ApiModelProperty(name = "start",value="yyyy-MM-dd HH:mm")
 	@GetMapping(path = "/restaurant/{restaurantId}/reservations")
-	public List<Reservation> save(@PathVariable(value = "restaurantId", required = true) int restaurantId,
-			@RequestParam(name = "start", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime start,
-			@RequestParam(name = "end", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime end) {
+	public List<Reservation> findByIdDateRange(@PathVariable(value = "restaurantId", required = true) int restaurantId,
+			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "start", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime start,
+			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "end", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime end) {
 		List<Reservation> reservations = reservationComponent.findByIdDate(restaurantId, start, end);
 		return reservations;
 	}
-	
+
 	@ApiOperation(value = "Delete a reservation")
 	@DeleteMapping(path = "/reservation/{reservationId}")
 	public void delete(@PathVariable(value = "reservationId", required = true) int reservationId) {
