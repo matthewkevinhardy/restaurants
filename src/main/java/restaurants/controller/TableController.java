@@ -3,6 +3,8 @@ package restaurants.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -35,7 +37,7 @@ public class TableController {
 
 	@ApiOperation(value = "Add a table")
 	@PostMapping(path = "/table/save")
-	public RestaurantTable save(final @RequestBody RestaurantTable restaurantTable) {
+	public RestaurantTable save(@Valid @RequestBody RestaurantTable restaurantTable) {
 		RestaurantTable saved = tableComponent.save(restaurantTable);
 		return saved;
 	}
@@ -65,7 +67,7 @@ public class TableController {
 	
 	@ApiOperation(value = "Update a table")
 	@PutMapping(path = "/table/update")
-	public RestaurantTable update(final @RequestBody RestaurantTable restaurantTable) {
+	public RestaurantTable update(@Valid @RequestBody RestaurantTable restaurantTable) {
 		RestaurantTable saved = tableComponent.update(restaurantTable);
 		return saved;
 	}

@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,8 +19,9 @@ public class Restaurant {
 	@Id
 	@Column(name = "RESTAURANT_ID")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int restaurantId;
+	private Integer restaurantId;
 	
+	@NotBlank(message = "name is mandatory")
 	@Column(name = "RESTAURANT_NAME")
 	private String name;
 	

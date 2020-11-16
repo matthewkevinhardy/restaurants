@@ -1,65 +1,69 @@
-package restaurants.model;
+package restaurants.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import io.swagger.annotations.ApiModelProperty;
-import restaurants.dto.ReservationDTO;
+import restaurants.model.Reservation;
 
-public class Reservation {
-	
+@Entity
+@Table(name = "RESERVATION")
+public class ReservationDTO {
 	private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	
+	@Id
+	@Column(name = "RESERVATION_ID")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer reservationId;
 	
 	@NotNull(message = "tableId is mandatory")
-	private Integer tableId;
+	@Column(name = "TABLE_ID")
+	private int tableId;
 	
-	@NotBlank(message = "start is mandatory")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
+	@NotNull(message = "start is mandatory")
 	private LocalDateTime start;
 	
-	@NotBlank(message = "end is mandatory")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
+	@NotNull(message = "end is mandatory")
 	private LocalDateTime end;
 	
-	public Reservation(Integer tableId, LocalDateTime start, LocalDateTime end) {
+	public ReservationDTO(int tableId, LocalDateTime start, LocalDateTime end) {
 		this.tableId = tableId;
 		this.start = start;
 		this.end = end;
 	}
 	
-	public Reservation(ReservationDTO reservationDTO) {
-		this.reservationId = reservationDTO.getReservationId();
-		this.tableId = reservationDTO.getTableId();
-		this.start = reservationDTO.getStart();
-		this.end = reservationDTO.getEnd();
+	public ReservationDTO(Reservation reservation) {
+		this.reservationId = reservation.getReservationId();
+		this.tableId = reservation.getTableId();
+		this.start = reservation.getStart();
+		this.end = reservation.getEnd();
 	}
-		
 	
 //	public void setStart(LocalDate startDate,LocalTime time) {
 //		this.start = LocalDateTime.of(startDate, time);
 //	}
 	
-	public Reservation() {
+	public ReservationDTO() {
 	}
 	
 	public Integer getReservationId() {
 		return reservationId;
 	}
 	
-	public Integer getTableId() {
+	public int getTableId() {
 		return tableId;
 	}
-	public void setTableId(Integer tableId) {
+	public void setTableId(int tableId) {
 		this.tableId = tableId;
 	}
 	
@@ -89,14 +93,15 @@ public class Reservation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Reservation other = (Reservation) obj;
+		ReservationDTO other = (ReservationDTO) obj;
 		if (reservationId != other.reservationId)
 			return false;
 		return true;
 	}
 	
-	public static Reservation valueOf(ReservationDTO reservationDTO) {
-		Reservation r = new Reservation(reservationDTO);
+	public static ReservationDTO valueOf(Reservation reservation) {
+		ReservationDTO r = new ReservationDTO(reservation);
+		
 		return r;
 	}
 }

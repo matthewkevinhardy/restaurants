@@ -3,6 +3,8 @@ package restaurants.controller;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -42,14 +44,14 @@ public class RestaurantController {
 	
 	@ApiOperation(value = "Add a restaurant")
 	@PostMapping(path = "/restaurant/save")
-	public Restaurant save(final @RequestBody Restaurant restaurant) {
+	public Restaurant save(@Valid @RequestBody Restaurant restaurant) {
 		Restaurant saved = restaurantController.save(restaurant);
 		return saved;
 	}
 	
 	@ApiOperation(value = "Update a restaurant")
 	@PutMapping(path = "/restaurant/update")
-	public Restaurant update(final @RequestBody Restaurant restaurant) {
+	public Restaurant update(@Valid @RequestBody Restaurant restaurant) {
 		Restaurant saved = restaurantController.save(restaurant);
 		return saved;
 	}

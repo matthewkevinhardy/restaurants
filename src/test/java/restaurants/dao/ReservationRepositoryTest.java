@@ -17,6 +17,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import restaurants.dto.ReservationDTO;
 import restaurants.model.Reservation;
 import restaurants.model.Restaurant;
 import restaurants.model.RestaurantTable;
@@ -55,9 +56,9 @@ class ReservationRepositoryTest {
 		LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.of(18, 0));
 		LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(19, 0));
 
-		Reservation r1 = reservationRespository.save(new Reservation(insertTable1.getTableId(), start, end));
-		Reservation r2 = reservationRespository.save(new Reservation(insertTable2.getTableId(), start, end));
-		Reservation r3 = reservationRespository.save(new Reservation(insertTable3.getTableId(), start, end));
+		ReservationDTO r1 = reservationRespository.save(new ReservationDTO(insertTable1.getTableId(), start, end));
+		ReservationDTO r2 = reservationRespository.save(new ReservationDTO(insertTable2.getTableId(), start, end));
+		ReservationDTO r3 = reservationRespository.save(new ReservationDTO(insertTable3.getTableId(), start, end));
 
 		assertNotNull(r1);
 		assertNotNull(r2);
@@ -73,7 +74,7 @@ class ReservationRepositoryTest {
 		LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
 		LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59));
 
-		List<Reservation> reservations = reservationRespository
+		List<ReservationDTO> reservations = reservationRespository
 				.findByRestaurantIdAndDateRange(insertRestaurant1.getRestaurantId(), start, end).get();
 
 		assertEquals(3, reservations.size());
