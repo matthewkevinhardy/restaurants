@@ -1,6 +1,5 @@
 package restaurants.dao;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ import restaurants.model.RestaurantTable;
 
 @Repository
 public interface RestaurantTableRepository extends CrudRepository<RestaurantTable, Integer> {
-	Optional<RestaurantTable> findByTableId(int tableId);
+	Optional<RestaurantTable> findByTableId(Integer tableId);
 
 	@Query("SELECT t FROM RestaurantTable t WHERE t.restaurantId=:restaurantId")
 	public Optional<List<RestaurantTable>> findByRestaurantId(@Param("restaurantId") int restaurantId);

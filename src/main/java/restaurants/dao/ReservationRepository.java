@@ -13,7 +13,7 @@ import restaurants.dto.ReservationDTO;
 
 @Repository
 public interface ReservationRepository extends CrudRepository<ReservationDTO, Integer> {
-	public Optional<ReservationDTO> findByReservationId(int id);
+	public Optional<ReservationDTO> findByReservationId(Integer id);
 
 	@Query("SELECT rvn FROM ReservationDTO rvn,RestaurantTable tab "
 			+ "WHERE rvn.tableId=tab.tableId AND tab.restaurantId=:restaurantId "

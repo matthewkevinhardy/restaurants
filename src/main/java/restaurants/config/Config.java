@@ -19,7 +19,7 @@ public class Config {
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
-	
+
 	@Bean
 	@Scope("singleton")
 	public Docket api() {

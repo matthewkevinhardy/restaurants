@@ -1,6 +1,5 @@
 package restaurants.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import restaurants.component.RestaurantComponent;
-import restaurants.dao.RestaurantRepository;
-import restaurants.exception.NotFoundException;
 import restaurants.model.Restaurant;
-import restaurants.model.RestaurantTable;
 
 @RestController
 @RequestMapping("restaurant_app")

@@ -80,7 +80,7 @@ public class ReservationComponentImpl implements ReservationComponent {
 		return Reservation.valueOf(updated);
 	}
 
-	public List<Reservation> findByIdDate(int restaurantId, LocalDateTime start, LocalDateTime end) {
+	public List<Reservation> findByRestaurantIdAndDateRange(int restaurantId, LocalDateTime start, LocalDateTime end) {
 		List<ReservationDTO> reservationDTOList = reservationRepository
 				.findByRestaurantIdAndDateRange(restaurantId, start, end)
 				.orElseThrow(() -> new NotFoundException("No reservations found for restaurantId:" + restaurantId

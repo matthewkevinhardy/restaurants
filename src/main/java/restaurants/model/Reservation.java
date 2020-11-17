@@ -1,7 +1,6 @@
 package restaurants.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,8 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 import restaurants.dto.ReservationDTO;
 
 public class Reservation {
-	
-	private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	
 	private Integer reservationId;
 	

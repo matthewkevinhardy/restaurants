@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import restaurants.component.ReservationComponent;
@@ -60,7 +59,7 @@ public class ReservationController {
 	public List<Reservation> findByIdDateRange(@PathVariable(value = "restaurantId", required = true) int restaurantId,
 			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "start", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime start,
 			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "end", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime end) {
-		List<Reservation> reservations = reservationComponent.findByIdDate(restaurantId, start, end);
+		List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDateRange(restaurantId, start, end);
 		return reservations;
 	}
 

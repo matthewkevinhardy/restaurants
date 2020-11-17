@@ -12,7 +12,7 @@ public interface ReservationComponent {
 
 	public Reservation update(Reservation reservation);
 	
-	public List<Reservation> findByIdDate(int restaurantId,LocalDateTime start,LocalDateTime end);
+	public List<Reservation> findByRestaurantIdAndDateRange(int restaurantId,LocalDateTime start,LocalDateTime end);
 	
 	public void delete(int reservationId);
 }

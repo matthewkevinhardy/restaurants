@@ -1,9 +1,6 @@
 package restaurants.dao;
 
-import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.NamedQuery;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +11,7 @@ import restaurants.model.Restaurant;
 
 @Repository
 public interface RestaurantRepository extends CrudRepository<Restaurant, Integer> {
-	Optional<Restaurant> findByRestaurantId(int id);
+	Optional<Restaurant> findByRestaurantId(Integer id);
 	
 	@Query("SELECT r FROM Restaurant r WHERE r.name=:name")
 	public Optional<Restaurant> findByName(@Param("name") String name);

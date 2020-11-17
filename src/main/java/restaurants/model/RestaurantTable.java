@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -42,7 +41,7 @@ public class RestaurantTable {
 		this.tableId=tableId;
 	}
 	
-	public int getTableId() {
+	public Integer getTableId() {
 		return tableId;
 	}
 	public int getSeatingCapacity() {

@@ -51,7 +51,7 @@ class ReservationComponentTest {
 		insertTable2 = tableComponent.save(new RestaurantTable(7, insertRestaurant1.getRestaurantId()));
 		insertTable3 = tableComponent.save(new RestaurantTable(8, insertRestaurant1.getRestaurantId()));
 
-		insertTable4 = tableComponent.save(new RestaurantTable(9, insertRestaurant2.getRestaurantId()));
+		insertTable4 = tableComponent.save(new RestaurantTable(10, insertRestaurant2.getRestaurantId()));
 		insertTable5 = tableComponent.save(new RestaurantTable(10, insertRestaurant2.getRestaurantId()));
 		insertTable6 = tableComponent.save(new RestaurantTable(11, insertRestaurant2.getRestaurantId()));
 	}
@@ -100,15 +100,15 @@ class ReservationComponentTest {
 			reservationComponent
 					.save(new Reservation(insertTable6.getTableId(), now.plusMinutes(50), now.plusMinutes(60)));
 
-			List<Reservation> reservations = reservationComponent.findByIdDate(this.insertRestaurant2.getRestaurantId(),
+			List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(),
 					now, now.plusMinutes(25));
 			assertEquals(1, reservations.size());
 
-			reservations = reservationComponent.findByIdDate(this.insertRestaurant2.getRestaurantId(), now,
+			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(), now,
 					now.plusMinutes(45));
 			assertEquals(2, reservations.size());
 
-			reservations = reservationComponent.findByIdDate(this.insertRestaurant2.getRestaurantId(), now,
+			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(), now,
 					now.plusMinutes(65));
 			assertEquals(3, reservations.size());
 
@@ -190,6 +190,21 @@ class ReservationComponentTest {
 			reservationComponent.update(saved);
 
 			assertEquals(newEnd, reservationComponent.getReservation(saved.getReservationId()).getEnd());
+		} catch (Exception e) {
+			fail(e);
+		}
+	}
+
+	@Test
+	void testUpdateReservationRecordNotExis() {
+		try {
+			LocalDateTime now = LocalDateTime.now();
+
+			Reservation updateNotExists = new Reservation(insertTable6.getTableId(), now.plusMinutes(10),
+					now.plusMinutes(15));
+			updateNotExists.setReservationId(123456);
+
+			assertThrows(NotFoundException.class, () -> reservationComponent.update(updateNotExists));
 
 		} catch (Exception e) {
 			fail(e);
@@ -208,7 +223,39 @@ class ReservationComponentTest {
 
 			saved.setStart(tomorrow.plusMinutes(30));
 			saved.setEnd(tomorrow.plusMinutes(45));
-			assertThrows(ReservationException.class,()->reservationComponent.update(saved));
+			assertThrows(ReservationException.class, () -> reservationComponent.update(saved));
+
+		} catch (Exception e) {
+			fail(e);
+		}
+	}
+
+	@Test
+	void testFindFreeTables() {
+		try {
+			LocalDateTime nextWeek = LocalDateTime.now().plusWeeks(1);
+
+			reservationComponent.save(
+					new Reservation(insertTable4.getTableId(), nextWeek.plusMinutes(10), nextWeek.plusMinutes(20)));
+			
+			reservationComponent.save(
+					new Reservation(insertTable5.getTableId(), nextWeek.plusMinutes(10), nextWeek.plusMinutes(60)));
+			
+			
+			assertThrows(NotFoundException.class, () -> tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
+					nextWeek.plusMinutes(10),
+					nextWeek.plusMinutes(20)));
+			
+			List<RestaurantTable> freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
+					nextWeek.plusMinutes(25),
+					nextWeek.plusMinutes(35));
+			assertEquals(1, freeTableList.size());
+			
+			freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
+					nextWeek.plusMinutes(60),
+					nextWeek.plusMinutes(70));
+			assertEquals(2, freeTableList.size());
+			
 
 		} catch (Exception e) {
 			fail(e);

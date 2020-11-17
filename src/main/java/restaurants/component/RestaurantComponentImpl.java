@@ -25,12 +25,12 @@ public class RestaurantComponentImpl implements RestaurantComponent {
 		restaurantRepository.findAll().forEach(resList::add);
 		return resList;
 	}
-
+	
 	public Restaurant save(Restaurant restaurant) {
 		Restaurant saved = restaurantRepository.save(restaurant);
 		return saved;
 	}
-
+	
 	public Restaurant update(Restaurant restaurant) {
 		restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
 				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurant.getRestaurantId()));
