@@ -55,15 +55,6 @@ public class ReservationController {
 		return new ResponseEntity<>(updated,HttpStatus.OK);
 	}
 
-//	@ApiOperation(value = "Get reservations for restaurant and date range")
-//	@GetMapping("/restaurant/{restaurantId}/reservations")
-//	public ResponseEntity<List<Reservation>> findByIdDateRange(@PathVariable(value = "restaurantId", required = true) int restaurantId,
-//			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "start", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime start,
-//			@ApiParam(value = "yyyy-MM-dd HH:mm",required = true) @RequestParam(name = "end", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime end) {
-//		List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDateRange(restaurantId, start, end);
-//		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.OK);
-//	}
-
 	@ApiOperation(value = "Get reservations for restaurant and date")
 	@GetMapping("/restaurant/{restaurantId}/reservations")
 	public ResponseEntity<List<Reservation>> findByIdDate(@PathVariable(value = "restaurantId", required = true) int restaurantId,
