@@ -2,16 +2,28 @@ package restaurants.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 
+@Entity
+@Table(name = "RESERVATION")
 public class Reservation {
 	
+	@Id
+	@Column(name = "RESERVATION_ID")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer reservationId;
 	
+	@Column(name = "TABLE_ID")
 	@NotNull(message = "tableId is mandatory")
 	private Integer tableId;
 	

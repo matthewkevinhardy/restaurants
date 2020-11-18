@@ -24,7 +24,7 @@ public interface RestaurantTableRepository extends CrudRepository<RestaurantTabl
 			"and t.seatingCapacity=:seatingCapacity " + 
 			"and t.tableId not in(" + 
 			"SELECT t.tableId " + 
-			"FROM ReservationDTO r, RestaurantTable t " + 
+			"FROM Reservation r, RestaurantTable t " + 
 			"where r.tableId=t.tableId " + 
 			"and t.restaurantId=:restaurantId " + 
 			"and t.seatingCapacity=:seatingCapacity " + 
