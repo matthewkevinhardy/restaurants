@@ -24,13 +24,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests()
-			.antMatchers(HttpMethod.POST,"/restaurant_app/restaurant/save").hasAuthority("SYS_ADMIN")
-			.antMatchers(HttpMethod.PUT,"/restaurant_app/restaurant/*/update").hasAuthority("SYS_ADMIN")
-			.antMatchers(HttpMethod.DELETE,"/restaurant_app/restaurant/delete").hasAuthority("SYS_ADMIN")
+			.antMatchers(HttpMethod.POST,"/api/v1/restaurant/save").hasAuthority("SYS_ADMIN")
+			.antMatchers(HttpMethod.PUT,"/api/v1/restaurant/*/update").hasAuthority("SYS_ADMIN")
+			.antMatchers(HttpMethod.DELETE,"/api/v1/restaurant/delete").hasAuthority("SYS_ADMIN")
 			.anyRequest().permitAll()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		httpSecurity.csrf().disable();
+		httpSecurity.headers().frameOptions().sameOrigin();
 	}
 	
 	@Autowired

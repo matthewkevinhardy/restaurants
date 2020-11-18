@@ -16,7 +16,7 @@ public class TableComponentImpl implements TableComponent {
 	@Autowired
 	private RestaurantTableRepository restaurantTableRepository;
 
-	public RestaurantTable getTable(int id) {
+	public RestaurantTable getTable(Integer id) {
 		return restaurantTableRepository.findById(id).orElseThrow(() -> new NotFoundException("Table id:" + id));
 	}
 
@@ -25,24 +25,26 @@ public class TableComponentImpl implements TableComponent {
 		return saved;
 	}
 
-	public List<RestaurantTable> getRestaurantTables(int restaurantId) {
+	public List<RestaurantTable> getRestaurantTables(Integer restaurantId) {
 		return restaurantTableRepository.findByRestaurantId(restaurantId)
 				.orElseThrow(() -> new NotFoundException("RestaurantId:" + restaurantId));
 	}
 
-	public List<RestaurantTable> findFreeTables(int restaurantId, int seatingCapacity, LocalDateTime startTime,
+	public List<RestaurantTable> findFreeTables(Integer restaurantId, Integer seatingCapacity, LocalDateTime startTime,
 			LocalDateTime endTime) {
 		return restaurantTableRepository.findFreeTables(restaurantId, seatingCapacity, startTime, endTime)
 				.orElseThrow(() -> new NotFoundException("No free tables:" + restaurantId));
 	}
 
-	public void delete(int id) {
+	public void delete(Integer id) {
+		restaurantTableRepository.findById(id).orElseThrow(() -> new NotFoundException("Table:" + id));
+
 		restaurantTableRepository.deleteById(id);
 	}
 
 	public RestaurantTable update(RestaurantTable restaurantTable) {
 		restaurantTableRepository.findByRestaurantId(restaurantTable.getTableId())
-				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurantTable.getTableId()));
+				.orElseThrow(() -> new NotFoundException("Table:" + restaurantTable.getTableId()));
 		RestaurantTable saved = restaurantTableRepository.save(restaurantTable);
 		return saved;
 	}

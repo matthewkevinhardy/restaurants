@@ -92,6 +92,9 @@ public class ReservationComponentImpl implements ReservationComponent {
 	}
 
 	public void delete(int reservationId) {
+		reservationRepository.findByReservationId(reservationId)
+				.orElseThrow(() -> new NotFoundException("Reservation: " + reservationId));
+
 		reservationRepository.deleteById(reservationId);
 	}
 }
