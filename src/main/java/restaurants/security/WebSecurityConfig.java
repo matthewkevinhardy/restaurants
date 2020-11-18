@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,15 +25,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests()
-			.antMatchers(HttpMethod.POST,"/api/v1/restaurant/save").hasAuthority("SYS_ADMIN")
-			.antMatchers(HttpMethod.PUT,"/api/v1/restaurant/*/update").hasAuthority("SYS_ADMIN")
-			.antMatchers(HttpMethod.DELETE,"/api/v1/restaurant/delete").hasAuthority("SYS_ADMIN")
+			.antMatchers(HttpMethod.POST,"/api/v1/restaurant/save").hasRole("SYS_ADMIN")
+			.antMatchers(HttpMethod.PUT,"/api/v1/restaurant/*/update").hasRole("SYS_ADMIN")
+			.antMatchers(HttpMethod.DELETE,"/api/v1/restaurant/delete").hasRole("SYS_ADMIN")
 			.anyRequest().permitAll()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		httpSecurity.csrf().disable();
 		httpSecurity.headers().frameOptions().sameOrigin();
+		
+		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
+	
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
 	
 	@Autowired
 	private DataSource dataSource;

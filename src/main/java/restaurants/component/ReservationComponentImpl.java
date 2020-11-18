@@ -2,15 +2,12 @@ package restaurants.component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import restaurants.dao.ReservationRepository;
-import restaurants.dto.ReservationDTO;
 import restaurants.exception.NotFoundException;
 import restaurants.exception.ReservationException;
 import restaurants.model.Reservation;
@@ -22,73 +19,63 @@ public class ReservationComponentImpl implements ReservationComponent {
 	private ReservationRepository reservationRepository;
 
 	public Reservation getReservation(int reservationId) {
-		ReservationDTO res = reservationRepository.findById(reservationId)
+		return reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new NotFoundException("reservationId:" + reservationId));
-
-		return Reservation.valueOf(res);
 	}
 
 	public Reservation save(Reservation reservation) {
 
-		ReservationDTO reservationDTO = ReservationDTO.valueOf(reservation);
-
-		if (reservationDTO.getStart().isBefore(LocalDateTime.now())) {
+		if (reservation.getStart().isBefore(LocalDateTime.now())) {
 			throw new ReservationException("Reservation in the past, start: " + reservation.getStart());
 		}
 
-		if (reservationDTO.getEnd().isBefore(reservationDTO.getStart())
-				|| reservationDTO.getEnd().isEqual(reservationDTO.getStart())) {
+		if (reservation.getEnd().isBefore(reservation.getStart())
+				|| reservation.getEnd().isEqual(reservation.getStart())) {
 			throw new ReservationException("Start time needs to be before end time");
 		}
 
-		reservationRepository.findByTableIdAndDateRange(reservationDTO.getTableId(), reservationDTO.getStart(),
-				reservationDTO.getEnd()).ifPresent(r -> {
+		reservationRepository.findByTableIdAndDateRange(reservation.getTableId(), reservation.getStart(),
+				reservation.getEnd()).ifPresent(r -> {
 					throw new ReservationException("Reservation clash!");
 				});
 
-		ReservationDTO savedDTO = reservationRepository.save(reservationDTO);
-		return Reservation.valueOf(savedDTO);
+		return reservationRepository.save(reservation);
 	}
 
 	public Reservation update(Reservation reservation) {
 
-		ReservationDTO reservationDTO = ReservationDTO.valueOf(reservation);
-
-		if (reservationDTO.getStart().isBefore(LocalDateTime.now())) {
+		if (reservation.getStart().isBefore(LocalDateTime.now())) {
 			throw new ReservationException("Reservation in the past, start: " + reservation.getStart());
 		}
 
-		if (reservationDTO.getEnd().isBefore(reservationDTO.getStart())) {
+		if (reservation.getEnd().isBefore(reservation.getStart())) {
 			throw new ReservationException("Reservation back-to-front!");
 		}
 
 		reservationRepository.findByReservationId(reservation.getReservationId())
 				.orElseThrow(() -> new NotFoundException("Reservation: " + reservation.getReservationId()));
 
-		List<ReservationDTO> clashList = reservationRepository.findByTableIdAndDateRange(reservationDTO.getTableId(),
-				reservationDTO.getStart(), reservationDTO.getEnd()).get();
+		List<Reservation> clashList = reservationRepository.findByTableIdAndDateRange(reservation.getTableId(),
+				reservation.getStart(), reservation.getEnd()).get();
 
 		if (clashList.isEmpty()) {
 			// No clashes
-		} else if (clashList.size() == 1 && clashList.contains(reservationDTO)) {
+		} else if (clashList.size() == 1 && clashList.contains(reservation)) {
 			// Only clash is the record we want to update
 		} else {
 			// Clashes
 			throw new ReservationException("Reservation clash!");
 		}
 
-		ReservationDTO updated = reservationRepository.save(reservationDTO);
-		return Reservation.valueOf(updated);
+		return reservationRepository.save(reservation);
 	}
 
 	public List<Reservation> findByRestaurantIdAndDateRange(int restaurantId, LocalDateTime start, LocalDateTime end) {
-		List<ReservationDTO> reservationDTOList = reservationRepository
+		List<Reservation> reservationList = reservationRepository
 				.findByRestaurantIdAndDateRange(restaurantId, start, end)
 				.orElseThrow(() -> new NotFoundException("No reservations found for restaurantId:" + restaurantId
 						+ " and start:" + start + " and end:" + end));
 
-		List<Reservation> reservationList = reservationDTOList.stream().map(Reservation::new)
-				.collect(Collectors.toCollection(ArrayList::new));
 		return reservationList;
 	}
 
@@ -97,13 +84,11 @@ public class ReservationComponentImpl implements ReservationComponent {
 		LocalDateTime start = date.atStartOfDay();
 		LocalDateTime end = start.plusDays(1);
 		
-		List<ReservationDTO> reservationDTOList = reservationRepository
+		List<Reservation> reservationList = reservationRepository
 				.findByRestaurantIdAndDateRange(restaurantId,start,end)
 				.orElseThrow(() -> new NotFoundException("No reservations found for restaurantId:" + restaurantId
 						+ " and date:" + date));
 
-		List<Reservation> reservationList = reservationDTOList.stream().map(Reservation::new)
-				.collect(Collectors.toCollection(ArrayList::new));
 		return reservationList;
 	}
 	

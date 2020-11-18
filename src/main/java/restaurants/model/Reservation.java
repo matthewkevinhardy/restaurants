@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
-import restaurants.dto.ReservationDTO;
 
 public class Reservation {
 	
@@ -31,18 +30,6 @@ public class Reservation {
 		this.start = start;
 		this.end = end;
 	}
-	
-	public Reservation(ReservationDTO reservationDTO) {
-		this.reservationId = reservationDTO.getReservationId();
-		this.tableId = reservationDTO.getTableId();
-		this.start = reservationDTO.getStart();
-		this.end = reservationDTO.getEnd();
-	}
-		
-	
-//	public void setStart(LocalDate startDate,LocalTime time) {
-//		this.start = LocalDateTime.of(startDate, time);
-//	}
 	
 	public Reservation() {
 	}
@@ -92,10 +79,5 @@ public class Reservation {
 		if (reservationId != other.reservationId)
 			return false;
 		return true;
-	}
-	
-	public static Reservation valueOf(ReservationDTO reservationDTO) {
-		Reservation r = new Reservation(reservationDTO);
-		return r;
 	}
 }

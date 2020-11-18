@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 import restaurants.component.RestaurantComponent;
 import restaurants.model.Restaurant;
 
@@ -40,7 +39,7 @@ public class RestaurantController {
 		return new ResponseEntity<>(restaurantComponent.getRestaurants(),HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "Add a restaurant", authorizations = { @Authorization(value="jwtToken") })
+	@ApiOperation(value = "Add a restaurant")
 	@PostMapping("/restaurant/save")
 	public ResponseEntity<Restaurant> save(@Valid @RequestBody Restaurant restaurant) {
 		Restaurant saved = restaurantComponent.save(restaurant);
