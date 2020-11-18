@@ -23,6 +23,9 @@ public class RestaurantComponentImpl implements RestaurantComponent {
 	public List<Restaurant> getRestaurants() {
 		List<Restaurant> resList = new LinkedList<Restaurant>();
 		restaurantRepository.findAll().forEach(resList::add);
+		
+		if(resList.isEmpty()) throw new NotFoundException("No restaurants found");
+		
 		return resList;
 	}
 

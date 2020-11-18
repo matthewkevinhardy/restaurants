@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import restaurants.component.ReservationComponent;
 import restaurants.model.Reservation;
+import static restaurants.util.Utils.DATE_FORMAT;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -55,7 +56,7 @@ public class ReservationController {
 	@ApiOperation(value = "Get reservations for restaurant and date")
 	@GetMapping("/restaurant/{restaurantId}/reservations")
 	public ResponseEntity<List<Reservation>> findByIdDate(@PathVariable(value = "restaurantId", required = true) int restaurantId,
-			@ApiParam(value = "yyyy-MM-dd",required = true) @RequestParam(name = "date", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+			@ApiParam(value = DATE_FORMAT,required = true) @RequestParam(name = "date", required = true) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate date) {
 		List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDate(restaurantId, date);
 		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.OK);
 	}

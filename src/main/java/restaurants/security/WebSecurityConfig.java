@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.authorizeRequests()
 			.antMatchers(HttpMethod.POST,"/api/v1/restaurant/save").hasRole("SYS_ADMIN")
 			.antMatchers(HttpMethod.PUT,"/api/v1/restaurant/*/update").hasRole("SYS_ADMIN")
-			.antMatchers(HttpMethod.DELETE,"/api/v1/restaurant/delete").hasRole("SYS_ADMIN")
+			.antMatchers(HttpMethod.DELETE,"/api/v1/restaurant/*/delete").hasRole("SYS_ADMIN")
 			.anyRequest().permitAll()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

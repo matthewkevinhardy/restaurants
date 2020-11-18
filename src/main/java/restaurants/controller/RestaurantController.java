@@ -56,7 +56,7 @@ public class RestaurantController {
 	}
 	
 	@ApiOperation(value = "Delete a restaurant")
-	@DeleteMapping("/restaurant/{id}")
+	@DeleteMapping("/restaurant/{id}/delete")
 	public ResponseEntity<Void> delete(@PathVariable(value = "id", required = true) int id) {
 		restaurantComponent.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

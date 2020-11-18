@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import static restaurants.util.Utils.DATE_FORMAT;
+
 @Entity
 @Table(name = "RESERVATION")
 public class Reservation {
@@ -28,13 +30,13 @@ public class Reservation {
 	private Integer tableId;
 	
 	@NotNull(message = "start is mandatory")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
+	@JsonFormat(pattern=DATE_FORMAT)
+	@ApiModelProperty(example=DATE_FORMAT)
 	private LocalDateTime start;
 	
 	@NotNull(message = "end is mandatory")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	@ApiModelProperty(example = "yyyy-MM-dd HH:mm")
+	@JsonFormat(pattern=DATE_FORMAT)
+	@ApiModelProperty(example=DATE_FORMAT)
 	private LocalDateTime end;
 	
 	public Reservation(Integer tableId, LocalDateTime start, LocalDateTime end) {
