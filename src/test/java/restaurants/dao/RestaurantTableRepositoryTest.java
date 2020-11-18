@@ -22,11 +22,11 @@ class RestaurantTableRepositoryTest {
 	
 	@Test
 	void testFindByIdInt() {
-		Restaurant insertRestaurant1 = restaurantRepository.save(new Restaurant("R1"));
-		Restaurant insertRestaurant2 = restaurantRepository.save(new Restaurant("R2"));
+		Restaurant insertRestaurant5 = restaurantRepository.save(new Restaurant("R5"));
+		Restaurant insertRestaurant6 = restaurantRepository.save(new Restaurant("R6"));
 		
-		RestaurantTable insertTable1 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant1.getRestaurantId()));
-		RestaurantTable insertTable2 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant2.getRestaurantId()));
+		RestaurantTable insertTable1 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant5.getRestaurantId()));
+		RestaurantTable insertTable2 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant6.getRestaurantId()));
 		
 		RestaurantTable getRestaurantTable1 = restaurantTableRepository.findById(insertTable1.getTableId()).get();
 		assertNotNull(getRestaurantTable1);

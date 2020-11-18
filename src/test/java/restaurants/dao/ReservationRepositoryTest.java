@@ -35,18 +35,18 @@ class ReservationRepositoryTest {
 	@Autowired
 	private ReservationRepository reservationRespository;
 
-	private Restaurant insertRestaurant1;
+	private Restaurant insertRestaurant7;
 	private RestaurantTable insertTable1;
 	private RestaurantTable insertTable2;
 	private RestaurantTable insertTable3;
 
 	@BeforeAll
 	public void setup() {
-		insertRestaurant1 = restaurantRepository.save(new Restaurant("R4"));
+		insertRestaurant7 = restaurantRepository.save(new Restaurant("R7"));
 
-		insertTable1 = restaurantTableRepository.save(new RestaurantTable(6, insertRestaurant1.getRestaurantId()));
-		insertTable2 = restaurantTableRepository.save(new RestaurantTable(7, insertRestaurant1.getRestaurantId()));
-		insertTable3 = restaurantTableRepository.save(new RestaurantTable(8, insertRestaurant1.getRestaurantId()));
+		insertTable1 = restaurantTableRepository.save(new RestaurantTable(6, insertRestaurant7.getRestaurantId()));
+		insertTable2 = restaurantTableRepository.save(new RestaurantTable(7, insertRestaurant7.getRestaurantId()));
+		insertTable3 = restaurantTableRepository.save(new RestaurantTable(8, insertRestaurant7.getRestaurantId()));
 
 	}
 
@@ -75,7 +75,7 @@ class ReservationRepositoryTest {
 		LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59));
 
 		List<ReservationDTO> reservations = reservationRespository
-				.findByRestaurantIdAndDateRange(insertRestaurant1.getRestaurantId(), start, end).get();
+				.findByRestaurantIdAndDateRange(insertRestaurant7.getRestaurantId(), start, end).get();
 
 		assertEquals(3, reservations.size());
 	}

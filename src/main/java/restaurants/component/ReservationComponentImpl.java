@@ -1,5 +1,6 @@
 package restaurants.component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,17 @@ public class ReservationComponentImpl implements ReservationComponent {
 		return reservationList;
 	}
 
+	public List<Reservation> findByRestaurantIdAndDate(int restaurantId, LocalDate date) {
+		List<ReservationDTO> reservationDTOList = reservationRepository
+				.findByRestaurantIdAndDate(restaurantId, date)
+				.orElseThrow(() -> new NotFoundException("No reservations found for restaurantId:" + restaurantId
+						+ " and date:" + date));
+
+		List<Reservation> reservationList = reservationDTOList.stream().map(Reservation::new)
+				.collect(Collectors.toCollection(ArrayList::new));
+		return reservationList;
+	}
+	
 	public void delete(int reservationId) {
 		reservationRepository.findByReservationId(reservationId)
 				.orElseThrow(() -> new NotFoundException("Reservation: " + reservationId));
