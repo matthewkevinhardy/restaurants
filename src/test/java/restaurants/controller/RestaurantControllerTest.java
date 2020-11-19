@@ -5,26 +5,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import restaurants.model.Restaurant;
 import restaurants.test.Utils;
@@ -162,28 +153,4 @@ class RestaurantControllerTest {
 		}
 	}
 	
-//	private List<Restaurant> getAllRestaurants() throws Exception {
-//		MvcResult result = this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk()).andReturn();
-//		String content = result.getResponse().getContentAsString();
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
-//	}
-//	
-//	private String obtainAccessToken(String username, String password) throws Exception {
-//		 
-//	    String json = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
-//	 
-//	    ResultActions result 
-//	      = mockMvc.perform(post("/api/v1/authenticate")
-//	        .content(json)
-//	        .contentType(MediaType.APPLICATION_JSON)
-//	        .accept(MediaType.APPLICATION_JSON))
-//	        .andExpect(status().isOk())
-//	        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-//	 
-//	    String resultString = result.andReturn().getResponse().getContentAsString();
-//	 
-//	    JacksonJsonParser jsonParser = new JacksonJsonParser();
-//	    return jsonParser.parseMap(resultString).get("token").toString();
-//	}
 }

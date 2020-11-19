@@ -1,5 +1,7 @@
 package restaurants.controller;
 
+import static restaurants.util.Utils.DATE_TIME_FORMAT;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,8 +25,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import restaurants.component.TableComponentImpl;
 import restaurants.model.RestaurantTable;
-import static restaurants.util.Utils.DATE_FORMAT;
-import static restaurants.util.Utils.DATE_TIME_FORMAT;
 
 @RestController
 @RequestMapping("/api/v1")

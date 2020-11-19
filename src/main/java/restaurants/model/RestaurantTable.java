@@ -20,16 +20,16 @@ public class RestaurantTable {
 	
 	@Column(name = "SEATING_CAPACITY")
 	@NotNull(message = "seatingCapacity is mandatory")
-	private int seatingCapacity;
+	private Integer seatingCapacity;
 	
 	@Column(name = "RESTAURANT_ID")
 	@NotNull(message = "restaurantId is mandatory")
-	private int restaurantId;
+	private Integer restaurantId;
 	
 	//@ManyToOne
 	//private Restaurant restaurant;
 	
-	public RestaurantTable(int seatingCapacity,int restaurantId) {
+	public RestaurantTable(Integer seatingCapacity,Integer restaurantId) {
 		this.seatingCapacity = seatingCapacity;
 		this.restaurantId=restaurantId;
 	}
@@ -44,7 +44,7 @@ public class RestaurantTable {
 	public Integer getTableId() {
 		return tableId;
 	}
-	public int getSeatingCapacity() {
+	public Integer getSeatingCapacity() {
 		return seatingCapacity;
 	}
 	
@@ -55,13 +55,13 @@ public class RestaurantTable {
 //		this.restaurant = restaurant;
 //	}
 	
-	public void setSeatingCapacity(int seatingCapacity) {
+	public void setSeatingCapacity(Integer seatingCapacity) {
 		this.seatingCapacity = seatingCapacity;
 	}
 	public int getRestaurantId() {
 		return restaurantId;
 	}
-	public void setRestaurantId(int restaurantId) {
+	public void setRestaurantId(Integer restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 		
