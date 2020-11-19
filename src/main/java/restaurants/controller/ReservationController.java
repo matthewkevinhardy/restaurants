@@ -55,7 +55,7 @@ public class ReservationController {
 
 	@ApiOperation(value = "Get reservations for restaurant and date")
 	@GetMapping("/restaurant/{restaurantId}/reservations")
-	public ResponseEntity<List<Reservation>> findByIdDate(@PathVariable(value = "restaurantId", required = true) int restaurantId,
+	public ResponseEntity<List<Reservation>> findByRestaurantIdDate(@PathVariable(value = "restaurantId", required = true) int restaurantId,
 			@ApiParam(value = DATE_FORMAT,required = true) @RequestParam(name = "date", required = true) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate date) {
 		List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDate(restaurantId, date);
 		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.OK);

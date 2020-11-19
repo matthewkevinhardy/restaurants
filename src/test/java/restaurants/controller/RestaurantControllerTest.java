@@ -12,18 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,6 +27,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import restaurants.model.Restaurant;
+import restaurants.test.Utils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,8 +36,6 @@ class RestaurantControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
-	private Restaurant newRestaurant;
 	
 	@Test
 	@Order(0)
@@ -68,12 +63,12 @@ class RestaurantControllerTest {
 	@Order(2)
 	void testSave() {
 		try {
-			String token = obtainAccessToken("sa", "password");
+			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
 			this.mockMvc.perform(post("/api/v1/restaurant/save")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"test\"}")
 							.header("Authorization", "Bearer "+token))
-					.andExpect(status().isCreated()).andReturn();
+					.andExpect(status().isCreated());
 			
 		} catch (Exception e) {
 			fail(e);
@@ -84,9 +79,10 @@ class RestaurantControllerTest {
 	@Order(3)
 	void testGetRestaurant() {
 		try {
-			Restaurant newRestaurant = getAllRestaurants().get(0);
+			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
-			this.mockMvc.perform(get("/api/v1/restaurant/"+newRestaurant.getRestaurantId())).andExpect(status().isOk());
+			this.mockMvc.perform(get("/api/v1/restaurant/"+newRestaurant.getRestaurantId()))
+				.andExpect(status().isOk());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -108,9 +104,9 @@ class RestaurantControllerTest {
 	@Order(5)
 	void testUpdate() {
 		try {
-			Restaurant newRestaurant = getAllRestaurants().get(0);
+			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
-			String token = obtainAccessToken("sa", "password");
+			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
 			this.mockMvc.perform(put("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/update")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"updated\"}")
@@ -125,7 +121,7 @@ class RestaurantControllerTest {
 	@Order(6)
 	void testDeleteNoAuth() {
 		try {
-			Restaurant newRestaurant = getAllRestaurants().get(0);
+			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
 			this.mockMvc.perform(delete("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/delete"))
 					.andExpect(status().isUnauthorized());
@@ -138,9 +134,9 @@ class RestaurantControllerTest {
 	@Order(7)
 	void testDelete() {
 		try {
-			String token = obtainAccessToken("sa", "password");
+			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
-			Restaurant newRestaurant = getAllRestaurants().get(0);
+			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
 			this.mockMvc.perform(delete("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/delete")
 					.header("Authorization", "Bearer "+token))
@@ -150,28 +146,44 @@ class RestaurantControllerTest {
 		}
 	}
 	
-	private List<Restaurant> getAllRestaurants() throws Exception {
-		MvcResult result = this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk()).andReturn();
-		String content = result.getResponse().getContentAsString();
-		ObjectMapper objectMapper = new ObjectMapper();
-		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
+	@Test
+	@Order(8)
+	void testSaveBlankName() {
+		try {
+			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			
+			this.mockMvc.perform(post("/api/v1/restaurant/save")
+							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"\"}")
+							.header("Authorization", "Bearer "+token))
+					.andExpect(status().isBadRequest());
+			
+		} catch (Exception e) {
+			fail(e);
+		}
 	}
 	
-	private String obtainAccessToken(String username, String password) throws Exception {
-		 
-	    String json = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
-	 
-	    ResultActions result 
-	      = mockMvc.perform(post("/api/v1/authenticate")
-	        .content(json)
-	        .contentType(MediaType.APPLICATION_JSON)
-	        .accept(MediaType.APPLICATION_JSON))
-	        .andExpect(status().isOk())
-	        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-	 
-	    String resultString = result.andReturn().getResponse().getContentAsString();
-	 
-	    JacksonJsonParser jsonParser = new JacksonJsonParser();
-	    return jsonParser.parseMap(resultString).get("token").toString();
-	}
+//	private List<Restaurant> getAllRestaurants() throws Exception {
+//		MvcResult result = this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk()).andReturn();
+//		String content = result.getResponse().getContentAsString();
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
+//	}
+//	
+//	private String obtainAccessToken(String username, String password) throws Exception {
+//		 
+//	    String json = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
+//	 
+//	    ResultActions result 
+//	      = mockMvc.perform(post("/api/v1/authenticate")
+//	        .content(json)
+//	        .contentType(MediaType.APPLICATION_JSON)
+//	        .accept(MediaType.APPLICATION_JSON))
+//	        .andExpect(status().isOk())
+//	        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+//	 
+//	    String resultString = result.andReturn().getResponse().getContentAsString();
+//	 
+//	    JacksonJsonParser jsonParser = new JacksonJsonParser();
+//	    return jsonParser.parseMap(resultString).get("token").toString();
+//	}
 }

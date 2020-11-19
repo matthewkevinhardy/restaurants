@@ -41,11 +41,11 @@ class RestaurantTableRepositoryTest {
 	
 	@Test
 	void testFindByRestaurantId() {
-		Restaurant insertRestaurant3 = restaurantRepository.save(new Restaurant("R3"));
-		RestaurantTable insertTable1 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant3.getRestaurantId()));
-		RestaurantTable insertTable2 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant3.getRestaurantId()));
+		Restaurant insertRestaurant7 = restaurantRepository.save(new Restaurant("R7"));
+		RestaurantTable insertTable1 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant7.getRestaurantId()));
+		RestaurantTable insertTable2 = restaurantTableRepository.save(new RestaurantTable(6,insertRestaurant7.getRestaurantId()));
 		
-		List<RestaurantTable> tableList = restaurantTableRepository.findByRestaurantId(insertRestaurant3.getRestaurantId()).get();
+		List<RestaurantTable> tableList = restaurantTableRepository.findByRestaurantId(insertRestaurant7.getRestaurantId()).get();
 		assertEquals(2, tableList.size());
 	}
 }

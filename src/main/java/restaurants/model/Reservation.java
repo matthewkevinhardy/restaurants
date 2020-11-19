@@ -11,10 +11,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import io.swagger.annotations.ApiModelProperty;
+import restaurants.util.LocalDateTimeSerializer;
 
-import static restaurants.util.Utils.DATE_FORMAT;
+import static restaurants.util.Utils.DATE_TIME_FORMAT;
 
 @Entity
 @Table(name = "RESERVATION")
@@ -30,13 +32,15 @@ public class Reservation {
 	private Integer tableId;
 	
 	@NotNull(message = "start is mandatory")
-	@JsonFormat(pattern=DATE_FORMAT)
-	@ApiModelProperty(example=DATE_FORMAT)
+	@JsonFormat(pattern=DATE_TIME_FORMAT)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@ApiModelProperty(example=DATE_TIME_FORMAT)
 	private LocalDateTime start;
 	
 	@NotNull(message = "end is mandatory")
-	@JsonFormat(pattern=DATE_FORMAT)
-	@ApiModelProperty(example=DATE_FORMAT)
+	@JsonFormat(pattern=DATE_TIME_FORMAT)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@ApiModelProperty(example=DATE_TIME_FORMAT)
 	private LocalDateTime end;
 	
 	public Reservation(Integer tableId, LocalDateTime start, LocalDateTime end) {
