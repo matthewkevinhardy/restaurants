@@ -26,9 +26,6 @@ public class RestaurantTable {
 	@NotNull(message = "restaurantId is mandatory")
 	private Integer restaurantId;
 	
-	//@ManyToOne
-	//private Restaurant restaurant;
-	
 	public RestaurantTable(Integer seatingCapacity,Integer restaurantId) {
 		this.seatingCapacity = seatingCapacity;
 		this.restaurantId=restaurantId;
@@ -47,13 +44,6 @@ public class RestaurantTable {
 	public Integer getSeatingCapacity() {
 		return seatingCapacity;
 	}
-	
-//	public Restaurant getRestaurant() {
-//		return restaurant;
-//	}
-//	public void setRestaurant(Restaurant restaurant) {
-//		this.restaurant = restaurant;
-//	}
 	
 	public void setSeatingCapacity(Integer seatingCapacity) {
 		this.seatingCapacity = seatingCapacity;
