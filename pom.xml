@@ -77,20 +77,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<!--Do not remove -->
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<finalName>MatthewHardy</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-					<descriptor>src/assembly/zip_src.xml</descriptor>
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>create-archive</id>
-						<phase>package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>repackage</goal>
 						</goals>
 					</execution>
 				</executions>
