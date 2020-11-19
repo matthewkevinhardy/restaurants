@@ -8,17 +8,29 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import restaurants.model.Restaurant;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -27,7 +39,9 @@ class RestaurantControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
+	
+	private Restaurant newRestaurant;
+	
 	@Test
 	@Order(0)
 	void testGetRestaurantsNotFound() {
@@ -44,7 +58,7 @@ class RestaurantControllerTest {
 		try {
 			this.mockMvc.perform(post("/api/v1/restaurant/save")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"test\"}"))
-					.andExpect(status().isForbidden());
+					.andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -59,7 +73,8 @@ class RestaurantControllerTest {
 			this.mockMvc.perform(post("/api/v1/restaurant/save")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"test\"}")
 							.header("Authorization", "Bearer "+token))
-					.andExpect(status().isCreated());
+					.andExpect(status().isCreated()).andReturn();
+			
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -69,7 +84,9 @@ class RestaurantControllerTest {
 	@Order(3)
 	void testGetRestaurant() {
 		try {
-			this.mockMvc.perform(get("/api/v1/restaurant/1")).andExpect(status().isOk());
+			Restaurant newRestaurant = getAllRestaurants().get(0);
+			
+			this.mockMvc.perform(get("/api/v1/restaurant/"+newRestaurant.getRestaurantId())).andExpect(status().isOk());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -77,21 +94,11 @@ class RestaurantControllerTest {
 
 	@Test
 	@Order(4)
-	void testGetRestaurants() {
-		try {
-			this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk());
-		} catch (Exception e) {
-			fail(e);
-		}
-	}
-	
-	@Test
-	@Order(5)
 	void testUpdateNoAuth() {
 		try {
 			this.mockMvc.perform(put("/api/v1/restaurant/1/update")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"updated\"}"))
-					.andExpect(status().isForbidden());
+					.andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -101,9 +108,11 @@ class RestaurantControllerTest {
 	@Order(5)
 	void testUpdate() {
 		try {
+			Restaurant newRestaurant = getAllRestaurants().get(0);
+			
 			String token = obtainAccessToken("sa", "password");
 			
-			this.mockMvc.perform(put("/api/v1/restaurant/1/update")
+			this.mockMvc.perform(put("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/update")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"updated\"}")
 							.header("Authorization", "Bearer "+token))
 					.andExpect(status().isOk());
@@ -116,8 +125,10 @@ class RestaurantControllerTest {
 	@Order(6)
 	void testDeleteNoAuth() {
 		try {
-			this.mockMvc.perform(delete("/api/v1/restaurant/1/delete"))
-					.andExpect(status().isForbidden());
+			Restaurant newRestaurant = getAllRestaurants().get(0);
+			
+			this.mockMvc.perform(delete("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/delete"))
+					.andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -129,12 +140,21 @@ class RestaurantControllerTest {
 		try {
 			String token = obtainAccessToken("sa", "password");
 			
-			this.mockMvc.perform(delete("/api/v1/restaurant/1/delete")
+			Restaurant newRestaurant = getAllRestaurants().get(0);
+			
+			this.mockMvc.perform(delete("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/delete")
 					.header("Authorization", "Bearer "+token))
 					.andExpect(status().isNoContent());
 		} catch (Exception e) {
 			fail(e);
 		}
+	}
+	
+	private List<Restaurant> getAllRestaurants() throws Exception {
+		MvcResult result = this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk()).andReturn();
+		String content = result.getResponse().getContentAsString();
+		ObjectMapper objectMapper = new ObjectMapper();
+		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
 	}
 	
 	private String obtainAccessToken(String username, String password) throws Exception {

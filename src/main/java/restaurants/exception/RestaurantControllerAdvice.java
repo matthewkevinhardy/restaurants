@@ -22,8 +22,9 @@ public class RestaurantControllerAdvice {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(RestaurantControllerAdvice.class);
 	
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e,HttpServletRequest request) {
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorResponse> handleRuntimeException(Exception e,HttpServletRequest request) {
+		LOG.error("Exception: ",e);
 		return error(HttpStatus.INTERNAL_SERVER_ERROR,e,request);
 	}
 	
@@ -56,7 +57,6 @@ public class RestaurantControllerAdvice {
     }
 	
 	private ResponseEntity<ErrorResponse> error(HttpStatus status, Exception e,HttpServletRequest request) {
-		LOG.error("Exception: ",e);
 		return ResponseEntity.status(status).body(
 				new ErrorResponse(status, status.value()+"", e.getMessage(), request.getRequestURI(), LocalDateTime.now(ZoneOffset.UTC)));
 	}
