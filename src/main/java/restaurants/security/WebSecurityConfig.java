@@ -48,15 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource);
-		
-//		JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcAuthentication = 
-//				auth.jdbcAuthentication().dataSource(dataSource);
-//
-//		if (!dataSource.getConnection().getMetaData().getTables(null, "", "USERS", null).first()) {
-//			jdbcAuthentication.withDefaultSchema().withUser(User.withUsername("sa").password(passwordEncoder().encode("password")).roles("SYS_ADMIN"))
-//			.withUser(
-//					User.withUsername("employee").password(passwordEncoder().encode("password")).roles("EMPLOYEE"));
-//		}
 	}
 
 	@Bean
