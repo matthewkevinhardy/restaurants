@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -17,7 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import restaurants.model.Restaurant;
+import restaurants.security.JwtResponse;
 import restaurants.test.Utils;
 
 @SpringBootTest
@@ -27,6 +31,8 @@ class RestaurantControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	
+	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Test
 	@Order(0)
@@ -54,11 +60,11 @@ class RestaurantControllerTest {
 	@Order(2)
 	void testSave() {
 		try {
-			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			JwtResponse jwtResponse  = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
 			this.mockMvc.perform(post("/api/v1/restaurant/save")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"test\"}")
-							.header("Authorization", "Bearer "+token))
+							.header("Authorization", "Bearer "+jwtResponse.getToken()))
 					.andExpect(status().isCreated());
 			
 		} catch (Exception e) {
@@ -97,11 +103,13 @@ class RestaurantControllerTest {
 		try {
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
-			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			
+			newRestaurant.setName("updated name");
 			
 			this.mockMvc.perform(put("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/update")
-							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"updated\"}")
-							.header("Authorization", "Bearer "+token))
+							.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newRestaurant))
+							.header("Authorization", "Bearer "+jwtResponse.getToken()))
 					.andExpect(status().isOk());
 		} catch (Exception e) {
 			fail(e);
@@ -125,12 +133,12 @@ class RestaurantControllerTest {
 	@Order(7)
 	void testDelete() {
 		try {
-			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 			
 			this.mockMvc.perform(delete("/api/v1/restaurant/"+newRestaurant.getRestaurantId()+"/delete")
-					.header("Authorization", "Bearer "+token))
+					.header("Authorization", "Bearer "+jwtResponse.getToken()))
 					.andExpect(status().isNoContent());
 		} catch (Exception e) {
 			fail(e);
@@ -141,11 +149,11 @@ class RestaurantControllerTest {
 	@Order(8)
 	void testSaveBlankName() {
 		try {
-			String token = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
+			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc,"sa", "password");
 			
 			this.mockMvc.perform(post("/api/v1/restaurant/save")
 							.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"\"}")
-							.header("Authorization", "Bearer "+token))
+							.header("Authorization", "Bearer "+jwtResponse.getToken()))
 					.andExpect(status().isBadRequest());
 			
 		} catch (Exception e) {

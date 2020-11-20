@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import restaurants.dao.RestaurantRepository;
 import restaurants.exception.NotFoundException;
+import restaurants.exception.RestaurantException;
 import restaurants.model.Restaurant;
 
 @Component
@@ -35,8 +36,13 @@ public class RestaurantComponentImpl implements RestaurantComponent {
 	}
 
 	public Restaurant update(Restaurant restaurant) {
-		restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
+		Restaurant existing = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
 				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurant.getRestaurantId()));
+		
+		if(existing.getName().equals(restaurant.getName())) {
+			throw new RestaurantException("Restaurant name already in use: "+restaurant.getName());
+		}
+		
 		Restaurant saved = restaurantRepository.save(restaurant);
 		return saved;
 	}

@@ -38,6 +38,11 @@ public class RestaurantControllerAdvice {
 		return error(HttpStatus.BAD_REQUEST,e,request);
 	}
 	
+	@ExceptionHandler(RestaurantException.class)
+	public ResponseEntity<ErrorResponse> handleRestaurantException(RestaurantException e,HttpServletRequest request) {
+		return error(HttpStatus.BAD_REQUEST,e,request);
+	}
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
                                                                   HttpServletRequest request) {

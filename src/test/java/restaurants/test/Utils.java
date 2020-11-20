@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import restaurants.model.Restaurant;
 import restaurants.model.RestaurantTable;
+import restaurants.security.JwtRequest;
+import restaurants.security.JwtResponse;
 
 public class Utils {
 	
@@ -30,13 +32,15 @@ public class Utils {
 		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
 	}
 	
-	public static String obtainAccessToken(MockMvc mockMvc,String username, String password) throws Exception {
+	public static JwtResponse obtainAccessToken(MockMvc mockMvc,String username, String password) throws Exception {
 		 
-	    String json = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
+	    //String json = "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
 	 
+	    JwtRequest jwtRequest = new JwtRequest(username, password);
+	    
 	    ResultActions result 
 	      = mockMvc.perform(post("/api/v1/authenticate")
-	        .content(json)
+	        .content(OBJECT_MAPPER.writeValueAsString(jwtRequest))
 	        .contentType(MediaType.APPLICATION_JSON)
 	        .accept(MediaType.APPLICATION_JSON))
 	        .andExpect(status().isOk())
@@ -44,16 +48,16 @@ public class Utils {
 	 
 	    String resultString = result.andReturn().getResponse().getContentAsString();
 	 
-	    JacksonJsonParser jsonParser = new JacksonJsonParser();
-	    return jsonParser.parseMap(resultString).get("token").toString();
+	    JwtResponse jwtResponse = OBJECT_MAPPER.readValue(resultString, JwtResponse.class);
+	    return jwtResponse;
 	}
 	
 	public static Restaurant createRestaurant(MockMvc mockMvc,String name) throws Exception {
-		String token = obtainAccessToken(mockMvc,"sa", "password");
+		JwtResponse jwtResponse = obtainAccessToken(mockMvc,"sa", "password");
 		
 		MvcResult result = mockMvc.perform(post("/api/v1/restaurant/save")
 						.contentType(MediaType.APPLICATION_JSON).content("{\"name\":\""+name+"\"}")
-						.header("Authorization", "Bearer "+token))
+						.header("Authorization", "Bearer "+jwtResponse.getToken()))
 				.andExpect(status().isCreated()).andReturn();
 		
 		String content = result.getResponse().getContentAsString();
