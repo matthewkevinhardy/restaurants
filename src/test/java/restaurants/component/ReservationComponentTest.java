@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -74,8 +75,8 @@ class ReservationComponentTest {
 	@Test
 	void testGetReservation() {
 		try {
-			LocalDateTime start = LocalDateTime.now().plusHours(1);
-			LocalDateTime end = LocalDateTime.now().plusHours(2);
+			LocalDateTime start = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(1);
+			LocalDateTime end = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(2);
 
 			Reservation inserted = reservationComponent.save(new Reservation(insertTable2.getTableId(), start, end));
 
@@ -100,16 +101,16 @@ class ReservationComponentTest {
 			reservationComponent
 					.save(new Reservation(insertTable6.getTableId(), now.plusMinutes(50), now.plusMinutes(60)));
 
-			List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(),
-					now, now.plusMinutes(25));
+			List<Reservation> reservations = reservationComponent
+					.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(), now, now.plusMinutes(25));
 			assertEquals(1, reservations.size());
 
-			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(), now,
-					now.plusMinutes(45));
+			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(),
+					now, now.plusMinutes(45));
 			assertEquals(2, reservations.size());
 
-			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(), now,
-					now.plusMinutes(65));
+			reservations = reservationComponent.findByRestaurantIdAndDateRange(this.insertRestaurant2.getRestaurantId(),
+					now, now.plusMinutes(65));
 			assertEquals(3, reservations.size());
 
 		} catch (Exception e) {
@@ -179,7 +180,7 @@ class ReservationComponentTest {
 	@Test
 	void testUpdateReservation() {
 		try {
-			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
 			Reservation saved = reservationComponent
 					.save(new Reservation(insertTable6.getTableId(), now.plusMinutes(10), now.plusMinutes(15)));
@@ -233,29 +234,25 @@ class ReservationComponentTest {
 	@Test
 	void testFindFreeTables() {
 		try {
-			LocalDateTime nextWeek = LocalDateTime.now().plusWeeks(1);
+			LocalDateTime nextWeek = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).plusWeeks(1);
 
 			reservationComponent.save(
 					new Reservation(insertTable4.getTableId(), nextWeek.plusMinutes(10), nextWeek.plusMinutes(20)));
-			
+
 			reservationComponent.save(
 					new Reservation(insertTable5.getTableId(), nextWeek.plusMinutes(10), nextWeek.plusMinutes(60)));
-			
-			
-			assertThrows(NotFoundException.class, () -> tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
-					nextWeek.plusMinutes(10),
-					nextWeek.plusMinutes(20)));
-			
-			List<RestaurantTable> freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
-					nextWeek.plusMinutes(25),
-					nextWeek.plusMinutes(35));
+
+			assertThrows(NotFoundException.class,
+					() -> tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10,
+							nextWeek.plusMinutes(10), nextWeek.plusMinutes(20)));
+
+			List<RestaurantTable> freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10,
+					nextWeek.plusMinutes(25), nextWeek.plusMinutes(35));
 			assertEquals(1, freeTableList.size());
-			
-			freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10, 
-					nextWeek.plusMinutes(60),
-					nextWeek.plusMinutes(70));
+
+			freeTableList = tableComponent.findFreeTables(insertRestaurant2.getRestaurantId(), 10,
+					nextWeek.plusMinutes(60), nextWeek.plusMinutes(70));
 			assertEquals(2, freeTableList.size());
-			
 
 		} catch (Exception e) {
 			fail(e);
