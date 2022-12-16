@@ -1,6 +1,6 @@
 # restaurants
 
-API documentation provided by swagger: <a href="http://localhost:8080/swagger-ui/">http://localhost:8080/swagger-ui/</a>
+API documentation provided by swagger: <a href="https://restaurants-matthewkevinhardy.up.railway.app/">restaurants-matthewkevinhardy.up.railway.app</a>
 <br>
 <br>
 Sys_admin username and password: <b>sa / password</b>
