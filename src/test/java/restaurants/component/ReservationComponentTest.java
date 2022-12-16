@@ -45,8 +45,8 @@ class ReservationComponentTest {
 
 	@BeforeAll
 	public void setup() {
-		insertRestaurant1 = restaurantComponent.save(new Restaurant("Restaurant 1"));
-		insertRestaurant2 = restaurantComponent.save(new Restaurant("Restaurant 2"));
+		insertRestaurant1 = restaurantComponent.save("Restaurant 1");
+		insertRestaurant2 = restaurantComponent.save("Restaurant 2");
 
 		insertTable1 = tableComponent.save(new RestaurantTable(6, insertRestaurant1.getRestaurantId()));
 		insertTable2 = tableComponent.save(new RestaurantTable(7, insertRestaurant1.getRestaurantId()));

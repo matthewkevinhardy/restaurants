@@ -24,25 +24,30 @@ public class RestaurantComponentImpl implements RestaurantComponent {
 	public List<Restaurant> getRestaurants() {
 		List<Restaurant> resList = new LinkedList<Restaurant>();
 		restaurantRepository.findAll().forEach(resList::add);
-		
-		if(resList.isEmpty()) throw new NotFoundException("No restaurants found");
-		
+
+		if (resList.isEmpty())
+			throw new NotFoundException("No restaurants found");
+
 		return resList;
 	}
 
-	public Restaurant save(Restaurant restaurant) {
-		Restaurant saved = restaurantRepository.save(restaurant);
+	public Restaurant save(String restaurantName) {
+		restaurantRepository.findByName(restaurantName).ifPresent(r -> {
+			throw new RestaurantException("Name already exists: " + r.getName());
+		});
+
+		Restaurant saved = restaurantRepository.save(new Restaurant(restaurantName));
 		return saved;
 	}
 
 	public Restaurant update(Restaurant restaurant) {
 		Restaurant existing = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
 				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurant.getRestaurantId()));
-		
-		if(existing.getName().equals(restaurant.getName())) {
-			throw new RestaurantException("Restaurant name already in use: "+restaurant.getName());
+
+		if (existing.getName().equals(restaurant.getName())) {
+			throw new RestaurantException("Restaurant name already in use: " + restaurant.getName());
 		}
-		
+
 		Restaurant saved = restaurantRepository.save(restaurant);
 		return saved;
 	}

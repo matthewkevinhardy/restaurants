@@ -23,38 +23,39 @@ import restaurants.model.Restaurant;
 @RestController
 @RequestMapping("/api/v1")
 public class RestaurantController {
-	
+
 	@Autowired
-    private RestaurantComponent restaurantComponent;
-	
+	private RestaurantComponent restaurantComponent;
+
 	@ApiOperation(value = "Get a restaurant")
 	@GetMapping("/restaurant/{id}")
-	public ResponseEntity<Restaurant> getRestaurant(@PathVariable(value = "id",required = true) Integer id) {
-		return new ResponseEntity<>(restaurantComponent.getRestaurant(id),HttpStatus.OK);
+	public ResponseEntity<Restaurant> getRestaurant(@PathVariable(value = "id", required = true) Integer id) {
+		return new ResponseEntity<>(restaurantComponent.getRestaurant(id), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Get all restaurants")
 	@GetMapping("/restaurants")
 	public ResponseEntity<List<Restaurant>> getRestaurants() {
-		return new ResponseEntity<>(restaurantComponent.getRestaurants(),HttpStatus.OK);
+		return new ResponseEntity<>(restaurantComponent.getRestaurants(), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Add a restaurant")
 	@PostMapping("/restaurant/save")
 	public ResponseEntity<Restaurant> save(@Valid @RequestBody Restaurant restaurant) {
-		Restaurant saved = restaurantComponent.save(restaurant);
-		return new ResponseEntity<>(saved,HttpStatus.CREATED);
+		Restaurant saved = restaurantComponent.save(restaurant.getName());
+		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
-	
+
 	@ApiOperation(value = "Update a restaurant")
 	@PutMapping("/restaurant/{restaurantId}/update")
-	public ResponseEntity<Restaurant> update(@PathVariable(value = "restaurantId",required = true) Integer restaurantId,
+	public ResponseEntity<Restaurant> update(
+			@PathVariable(value = "restaurantId", required = true) Integer restaurantId,
 			@Valid @RequestBody Restaurant restaurant) {
 		restaurant.setRestaurantId(restaurantId);
 		Restaurant saved = restaurantComponent.update(restaurant);
-		return new ResponseEntity<>(saved,HttpStatus.OK);
+		return new ResponseEntity<>(saved, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Delete a restaurant")
 	@DeleteMapping("/restaurant/{id}/delete")
 	public ResponseEntity<Void> delete(@PathVariable(value = "id", required = true) int id) {
