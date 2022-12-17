@@ -20,30 +20,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Autowired
 	private JwtAuthEntryPoint jwtAuthenticationEntryPoint;
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/restaurant/save").hasRole("SYS_ADMIN")
-				.antMatchers(HttpMethod.PUT, "/api/v1/restaurant/*/update").hasRole("SYS_ADMIN")
-				.antMatchers(HttpMethod.DELETE, "/api/v1/restaurant/*/delete").hasRole("SYS_ADMIN")
-				.anyRequest().permitAll()
-				.and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST).hasRole("SYS_ADMIN").antMatchers(HttpMethod.PUT)
+				.hasRole("SYS_ADMIN").antMatchers(HttpMethod.DELETE).hasRole("SYS_ADMIN").anyRequest().permitAll().and()
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		httpSecurity.csrf().disable();
 		httpSecurity.headers().frameOptions().sameOrigin();
 
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-	}	
+	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
