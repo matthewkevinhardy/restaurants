@@ -11,31 +11,32 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import restaurants.security.JwtResponse;
+import restaurants.test.Utils;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class TableControllerTest {
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Test
 	void testUpdateBlankField() {
 		try {
-			
-			String tableJsonNoRestId = "{" + 
-					"  \"seatingCapacity\": 1," + 
-					"  \"tableId\": 1" + 
-					"}";
-			
-			this.mockMvc.perform(post("/api/v1/table/save")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(tableJsonNoRestId))
-			.andExpect(status().isBadRequest());
-			
+
+			JwtResponse jwtResponse = Utils.obtainAccessToken(mockMvc, "sa", "password");
+
+			String tableJsonNoRestId = "{" + "  \"seatingCapacity\": 1," + "  \"tableId\": 1" + "}";
+
+			this.mockMvc
+					.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
+							.content(tableJsonNoRestId).header("Authorization", "Bearer " + jwtResponse.getToken()))
+					.andExpect(status().isBadRequest());
+
 		} catch (Exception e) {
 			fail(e);
 		}
 	}
 
-	
 }

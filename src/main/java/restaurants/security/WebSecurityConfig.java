@@ -32,9 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST).hasRole("SYS_ADMIN").antMatchers(HttpMethod.PUT)
-				.hasRole("SYS_ADMIN").antMatchers(HttpMethod.DELETE).hasRole("SYS_ADMIN").anyRequest().permitAll().and()
-				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+		httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll()
+				.antMatchers(HttpMethod.POST).hasRole("SYS_ADMIN").antMatchers(HttpMethod.PUT).hasRole("SYS_ADMIN")
+				.antMatchers(HttpMethod.DELETE).hasRole("SYS_ADMIN").anyRequest().permitAll().and().exceptionHandling()
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		httpSecurity.csrf().disable();
