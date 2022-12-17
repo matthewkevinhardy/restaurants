@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class RestaurantController {
 
 	@ApiOperation(value = "Add a restaurant")
 	@PostMapping("/restaurant/save")
+	@PreAuthorize("hasRole('SYS_ADMIN')")
 	public ResponseEntity<Restaurant> save(@Valid @RequestBody Restaurant restaurant) {
 		Restaurant saved = restaurantComponent.save(restaurant.getName());
 		return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -48,6 +50,7 @@ public class RestaurantController {
 
 	@ApiOperation(value = "Update a restaurant")
 	@PutMapping("/restaurant/{restaurantId}/update")
+	@PreAuthorize("hasRole('SYS_ADMIN')")
 	public ResponseEntity<Restaurant> update(
 			@PathVariable(value = "restaurantId", required = true) Integer restaurantId,
 			@Valid @RequestBody Restaurant restaurant) {
@@ -58,6 +61,7 @@ public class RestaurantController {
 
 	@ApiOperation(value = "Delete a restaurant")
 	@DeleteMapping("/restaurant/{id}/delete")
+	@PreAuthorize("hasRole('SYS_ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable(value = "id", required = true) int id) {
 		restaurantComponent.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

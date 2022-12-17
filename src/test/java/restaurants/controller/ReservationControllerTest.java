@@ -65,11 +65,9 @@ class ReservationControllerTest {
 			LocalDateTime now = LocalDateTime.now();
 			Reservation reservation = new Reservation(table.getTableId(), now.plusHours(1), now.plusHours(2));
 
-			this.mockMvc
-					.perform(post("/api/v1/reservation/save").contentType(MediaType.APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(reservation))
-							.header("Authorization", "Bearer " + jwtResponse.getToken()))
-					.andExpect(status().isCreated());
+			this.mockMvc.perform(post("/api/v1/reservation/save").contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(reservation))
+					.header("Authorization", jwtResponse.getToken())).andExpect(status().isCreated());
 
 		} catch (Exception e) {
 			fail(e);
@@ -103,11 +101,9 @@ class ReservationControllerTest {
 			LocalDateTime now = LocalDateTime.now();
 			Reservation reservationWithNoStart = new Reservation(1, null, now.plusHours(2));
 
-			this.mockMvc
-					.perform(put("/api/v1/reservation/1/update").contentType(MediaType.APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(reservationWithNoStart))
-							.header("Authorization", "Bearer " + jwtResponse.getToken()))
-					.andExpect(status().isBadRequest());
+			this.mockMvc.perform(put("/api/v1/reservation/1/update").contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(reservationWithNoStart))
+					.header("Authorization", jwtResponse.getToken())).andExpect(status().isBadRequest());
 
 		} catch (Exception e) {
 			fail(e);
@@ -120,9 +116,7 @@ class ReservationControllerTest {
 		try {
 			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc, "sa", "password");
 
-			this.mockMvc
-					.perform(
-							delete("/api/v1/reservation/1").header("Authorization", "Bearer " + jwtResponse.getToken()))
+			this.mockMvc.perform(delete("/api/v1/reservation/1").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isNoContent());
 
 		} catch (Exception e) {

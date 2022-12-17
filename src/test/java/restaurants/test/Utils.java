@@ -52,8 +52,9 @@ public class Utils {
 	public static Restaurant createRestaurant(MockMvc mockMvc, String name) throws Exception {
 		JwtResponse jwtResponse = obtainAccessToken(mockMvc, "sa", "password");
 
-		MvcResult result = mockMvc.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"" + name + "\"}").header("Authorization", "Bearer " + jwtResponse.getToken()))
+		MvcResult result = mockMvc
+				.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
+						.content("{\"name\":\"" + name + "\"}").header("Authorization", jwtResponse.getToken()))
 				.andExpect(status().isCreated()).andReturn();
 
 		String content = result.getResponse().getContentAsString();
@@ -65,10 +66,8 @@ public class Utils {
 
 		RestaurantTable table = new RestaurantTable(seatingCapacity, restaurantId);
 
-		MvcResult result = mockMvc
-				.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
-						.content(OBJECT_MAPPER.writeValueAsString(table))
-						.header("Authorization", "Bearer " + jwtResponse.getToken()))
+		MvcResult result = mockMvc.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
+				.content(OBJECT_MAPPER.writeValueAsString(table)).header("Authorization", jwtResponse.getToken()))
 				.andExpect(status().isCreated()).andReturn();
 
 		String content = result.getResponse().getContentAsString();

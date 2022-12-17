@@ -31,7 +31,7 @@ class TableControllerTest {
 
 			this.mockMvc
 					.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
-							.content(tableJsonNoRestId).header("Authorization", "Bearer " + jwtResponse.getToken()))
+							.content(tableJsonNoRestId).header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isBadRequest());
 
 		} catch (Exception e) {

@@ -64,7 +64,7 @@ class RestaurantControllerTest {
 
 			this.mockMvc
 					.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
-							.content("{\"name\":\"test\"}").header("Authorization", "Bearer " + jwtResponse.getToken()))
+							.content("{\"name\":\"test\"}").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isCreated());
 
 		} catch (Exception e) {
@@ -108,7 +108,7 @@ class RestaurantControllerTest {
 
 			this.mockMvc.perform(put("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/update")
 					.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newRestaurant))
-					.header("Authorization", "Bearer " + jwtResponse.getToken())).andExpect(status().isOk());
+					.header("Authorization", jwtResponse.getToken())).andExpect(status().isOk());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -135,10 +135,8 @@ class RestaurantControllerTest {
 
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 
-			this.mockMvc
-					.perform(delete("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete")
-							.header("Authorization", "Bearer " + jwtResponse.getToken()))
-					.andExpect(status().isNoContent());
+			this.mockMvc.perform(delete("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete")
+					.header("Authorization", jwtResponse.getToken())).andExpect(status().isNoContent());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -152,7 +150,7 @@ class RestaurantControllerTest {
 
 			this.mockMvc
 					.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
-							.content("{\"name\":\"\"}").header("Authorization", "Bearer " + jwtResponse.getToken()))
+							.content("{\"name\":\"\"}").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isBadRequest());
 
 		} catch (Exception e) {

@@ -1,5 +1,7 @@
 package restaurants.controller;
 
+import static restaurants.util.Utils.DATE_FORMAT;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +26,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import restaurants.component.ReservationComponent;
 import restaurants.model.Reservation;
-import static restaurants.util.Utils.DATE_FORMAT;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,35 +36,41 @@ public class ReservationController {
 
 	@ApiOperation(value = "Get a reservation")
 	@GetMapping("/reservation/{reservationId}")
-	public ResponseEntity<Reservation> getReservation(@PathVariable(value = "reservationId", required = true) int reservationId) {
-		return new ResponseEntity<>(reservationComponent.getReservation(reservationId),HttpStatus.OK);
+	public ResponseEntity<Reservation> getReservation(
+			@PathVariable(value = "reservationId", required = true) int reservationId) {
+		return new ResponseEntity<>(reservationComponent.getReservation(reservationId), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Add a reservation")
 	@PostMapping("/reservation/save")
+	@PreAuthorize("hasRole('SYS_ADMIN')")
 	public ResponseEntity<Reservation> save(@Valid @RequestBody Reservation reservation) {
 		Reservation saved = reservationComponent.save(reservation);
-		return new ResponseEntity<>(saved,HttpStatus.CREATED);
+		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "Update a reservation")
 	@PutMapping("/reservation/{reservationId}/update")
-	public ResponseEntity<Reservation> update(@Valid @RequestBody Reservation reservation,@PathVariable(value = "reservationId", required = true) Integer reservationId) {
+	@PreAuthorize("hasRole('SYS_ADMIN')")
+	public ResponseEntity<Reservation> update(@Valid @RequestBody Reservation reservation,
+			@PathVariable(value = "reservationId", required = true) Integer reservationId) {
 		reservation.setReservationId(reservationId);
 		Reservation updated = reservationComponent.update(reservation);
-		return new ResponseEntity<>(updated,HttpStatus.OK);
+		return new ResponseEntity<>(updated, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get reservations for restaurant and date")
 	@GetMapping("/restaurant/{restaurantId}/reservations")
-	public ResponseEntity<List<Reservation>> findByRestaurantIdDate(@PathVariable(value = "restaurantId", required = true) int restaurantId,
-			@ApiParam(value = DATE_FORMAT,required = true) @RequestParam(name = "date", required = true) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate date) {
+	public ResponseEntity<List<Reservation>> findByRestaurantIdDate(
+			@PathVariable(value = "restaurantId", required = true) int restaurantId,
+			@ApiParam(value = DATE_FORMAT, required = true) @RequestParam(name = "date", required = true) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate date) {
 		List<Reservation> reservations = reservationComponent.findByRestaurantIdAndDate(restaurantId, date);
-		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.OK);
+		return new ResponseEntity<List<Reservation>>(reservations, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Delete a reservation")
 	@DeleteMapping("/reservation/{reservationId}")
+	@PreAuthorize("hasRole('SYS_ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable(value = "reservationId", required = true) int reservationId) {
 		reservationComponent.delete(reservationId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
