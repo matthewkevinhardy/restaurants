@@ -2,6 +2,7 @@ package restaurants.component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,10 +42,12 @@ public class RestaurantComponentImpl implements RestaurantComponent {
 	}
 
 	public Restaurant update(Restaurant restaurant) {
-		Restaurant existing = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
+		Restaurant currentRecord = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId())
 				.orElseThrow(() -> new NotFoundException("Restaurant:" + restaurant.getRestaurantId()));
 
-		if (existing.getName().equals(restaurant.getName())) {
+		Optional<Restaurant> existingName = restaurantRepository.findByName(restaurant.getName());
+
+		if (existingName.isPresent() && !existingName.get().getRestaurantId().equals(currentRecord.getRestaurantId())) {
 			throw new RestaurantException("Restaurant name already in use: " + restaurant.getName());
 		}
 
