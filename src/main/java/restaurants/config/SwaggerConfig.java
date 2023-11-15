@@ -20,32 +20,26 @@ public class SwaggerConfig {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
-	  @Bean
-	  public Docket api() {
-	    return new Docket(DocumentationType.SWAGGER_2)
-	        .securityContexts(Arrays.asList(securityContext()))
-	        .securitySchemes(Arrays.asList(apiKey()))
-	        .select()
-	        .apis(RequestHandlerSelectors.any())
-	        .paths(PathSelectors.regex("/api/v1/.*"))
-	        .build();
-	  }
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).securityContexts(Arrays.asList(securityContext()))
+				.securitySchemes(Arrays.asList(apiKey())).select().apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.regex("/restaurants/api/v1/.*")).build();
+	}
 
-	  private ApiKey apiKey() {
-	    return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
-	  }
+	private ApiKey apiKey() {
+		return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+	}
 
-	  private SecurityContext securityContext() {
-	    return springfox.documentation.spi.service.contexts.SecurityContext.builder()
-	        .securityReferences(defaultAuth())
-	        .build();
-	  }
+	private SecurityContext securityContext() {
+		return springfox.documentation.spi.service.contexts.SecurityContext.builder().securityReferences(defaultAuth())
+				.build();
+	}
 
-	  List<SecurityReference> defaultAuth() {
-	    AuthorizationScope authorizationScope
-	        = new AuthorizationScope("global", "accessEverything");
-	    AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-	    authorizationScopes[0] = authorizationScope;
-	    return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
-	  }
+	List<SecurityReference> defaultAuth() {
+		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = authorizationScope;
+		return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+	}
 }
