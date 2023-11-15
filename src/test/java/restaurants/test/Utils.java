@@ -25,7 +25,8 @@ public class Utils {
 	private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	public static List<Restaurant> getAllRestaurants(MockMvc mockMvc) throws Exception {
-		MvcResult result = mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isOk()).andReturn();
+		MvcResult result = mockMvc.perform(get("/restaurants/api/v1/restaurants")).andExpect(status().isOk())
+				.andReturn();
 		String content = result.getResponse().getContentAsString();
 		ObjectMapper objectMapper = new ObjectMapper();
 		return Arrays.asList(objectMapper.readValue(content, Restaurant[].class));
@@ -33,13 +34,10 @@ public class Utils {
 
 	public static JwtResponse obtainAccessToken(MockMvc mockMvc, String username, String password) throws Exception {
 
-		// String json =
-		// "{\"username\":\""+username+"\",\"password\":\""+password+"\"}";
-
 		JwtRequest jwtRequest = new JwtRequest(username, password);
 
 		ResultActions result = mockMvc
-				.perform(post("/api/v1/authenticate").content(OBJECT_MAPPER.writeValueAsString(jwtRequest))
+				.perform(post("/restaurants/api/v1/authenticate").content(OBJECT_MAPPER.writeValueAsString(jwtRequest))
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -53,7 +51,7 @@ public class Utils {
 		JwtResponse jwtResponse = obtainAccessToken(mockMvc, "sa", "password");
 
 		MvcResult result = mockMvc
-				.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
+				.perform(post("/restaurants/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
 						.content("{\"name\":\"" + name + "\"}").header("Authorization", jwtResponse.getToken()))
 				.andExpect(status().isCreated()).andReturn();
 
@@ -66,9 +64,9 @@ public class Utils {
 
 		RestaurantTable table = new RestaurantTable(seatingCapacity, restaurantId);
 
-		MvcResult result = mockMvc.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
-				.content(OBJECT_MAPPER.writeValueAsString(table)).header("Authorization", jwtResponse.getToken()))
-				.andExpect(status().isCreated()).andReturn();
+		MvcResult result = mockMvc.perform(post("/restaurants/api/v1/table/save")
+				.contentType(MediaType.APPLICATION_JSON).content(OBJECT_MAPPER.writeValueAsString(table))
+				.header("Authorization", jwtResponse.getToken())).andExpect(status().isCreated()).andReturn();
 
 		String content = result.getResponse().getContentAsString();
 		return OBJECT_MAPPER.readValue(content, RestaurantTable.class);

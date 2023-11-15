@@ -22,7 +22,7 @@ import restaurants.component.RestaurantComponent;
 import restaurants.model.Restaurant;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/restaurants/api/v1")
 public class RestaurantController {
 
 	@Autowired

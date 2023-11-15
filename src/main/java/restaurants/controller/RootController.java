@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 class RootController {
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/restaurants/")
 	public void redirect(HttpServletResponse response) throws IOException {
-		response.sendRedirect("/swagger-ui/");
+		response.sendRedirect("/restaurants/swagger-ui/");
 	}
 }

@@ -28,7 +28,7 @@ import restaurants.component.ReservationComponent;
 import restaurants.model.Reservation;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/restaurants/api/v1")
 public class ReservationController {
 
 	@Autowired

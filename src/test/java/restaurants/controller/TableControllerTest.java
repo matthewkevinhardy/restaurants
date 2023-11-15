@@ -30,7 +30,7 @@ class TableControllerTest {
 			String tableJsonNoRestId = "{" + "  \"seatingCapacity\": 1," + "  \"tableId\": 1" + "}";
 
 			this.mockMvc
-					.perform(post("/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
+					.perform(post("/restaurants/api/v1/table/save").contentType(MediaType.APPLICATION_JSON)
 							.content(tableJsonNoRestId).header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isBadRequest());
 

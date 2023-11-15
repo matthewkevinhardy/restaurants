@@ -38,16 +38,13 @@ class ReservationControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	// @Autowired
-	// private
-
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
 	@Order(0)
 	void testGetReservationError() {
 		try {
-			this.mockMvc.perform(get("/api/v1/reservation/1")).andExpect(status().isNotFound());
+			this.mockMvc.perform(get("/restaurants/api/v1/reservation/1")).andExpect(status().isNotFound());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -65,7 +62,7 @@ class ReservationControllerTest {
 			LocalDateTime now = LocalDateTime.now();
 			Reservation reservation = new Reservation(table.getTableId(), now.plusHours(1), now.plusHours(2));
 
-			this.mockMvc.perform(post("/api/v1/reservation/save").contentType(MediaType.APPLICATION_JSON)
+			this.mockMvc.perform(post("/restaurants/api/v1/reservation/save").contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsString(reservation))
 					.header("Authorization", jwtResponse.getToken())).andExpect(status().isCreated());
 
@@ -83,8 +80,8 @@ class ReservationControllerTest {
 			LocalDate tomorrow = LocalDate.now().plusDays(1);
 
 			this.mockMvc
-					.perform(get("/api/v1/restaurant/" + restaurant.getRestaurantId() + "/reservations").param("date",
-							tomorrow.format(DateTimeFormatter.ofPattern(DATE_FORMAT))))
+					.perform(get("/restaurants/api/v1/restaurant/" + restaurant.getRestaurantId() + "/reservations")
+							.param("date", tomorrow.format(DateTimeFormatter.ofPattern(DATE_FORMAT))))
 					.andExpect(status().isNotFound());
 
 		} catch (Exception e) {
@@ -101,7 +98,7 @@ class ReservationControllerTest {
 			LocalDateTime now = LocalDateTime.now();
 			Reservation reservationWithNoStart = new Reservation(1, null, now.plusHours(2));
 
-			this.mockMvc.perform(put("/api/v1/reservation/1/update").contentType(MediaType.APPLICATION_JSON)
+			this.mockMvc.perform(put("/restaurants/api/v1/reservation/1/update").contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsString(reservationWithNoStart))
 					.header("Authorization", jwtResponse.getToken())).andExpect(status().isBadRequest());
 
@@ -116,7 +113,9 @@ class ReservationControllerTest {
 		try {
 			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc, "sa", "password");
 
-			this.mockMvc.perform(delete("/api/v1/reservation/1").header("Authorization", jwtResponse.getToken()))
+			this.mockMvc
+					.perform(
+							delete("/restaurants/api/v1/reservation/1").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isNoContent());
 
 		} catch (Exception e) {

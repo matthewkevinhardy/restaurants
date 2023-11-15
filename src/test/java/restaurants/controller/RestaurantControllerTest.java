@@ -39,7 +39,7 @@ class RestaurantControllerTest {
 	@Sql(scripts = "classpath:data.sql")
 	void testGetRestaurantsNotFound() {
 		try {
-			this.mockMvc.perform(get("/api/v1/restaurants")).andExpect(status().isNotFound());
+			this.mockMvc.perform(get("/restaurants/api/v1/restaurants")).andExpect(status().isNotFound());
 		} catch (Exception e) {
 			fail(e);
 		}
@@ -49,7 +49,7 @@ class RestaurantControllerTest {
 	@Order(1)
 	void testSaveNoAuth() {
 		try {
-			this.mockMvc.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
+			this.mockMvc.perform(post("/restaurants/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
 					.content("{\"name\":\"test\"}")).andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
@@ -63,7 +63,7 @@ class RestaurantControllerTest {
 			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc, "sa", "password");
 
 			this.mockMvc
-					.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
+					.perform(post("/restaurants/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"name\":\"test\"}").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isCreated());
 
@@ -78,7 +78,7 @@ class RestaurantControllerTest {
 		try {
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 
-			this.mockMvc.perform(get("/api/v1/restaurant/" + newRestaurant.getRestaurantId()))
+			this.mockMvc.perform(get("/restaurants/api/v1/restaurant/" + newRestaurant.getRestaurantId()))
 					.andExpect(status().isOk());
 		} catch (Exception e) {
 			fail(e);
@@ -89,7 +89,7 @@ class RestaurantControllerTest {
 	@Order(4)
 	void testUpdateNoAuth() {
 		try {
-			this.mockMvc.perform(put("/api/v1/restaurant/1/update").contentType(MediaType.APPLICATION_JSON)
+			this.mockMvc.perform(put("/restaurants/api/v1/restaurant/1/update").contentType(MediaType.APPLICATION_JSON)
 					.content("{\"name\":\"updated\"}")).andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
@@ -106,7 +106,7 @@ class RestaurantControllerTest {
 
 			newRestaurant.setName("updated name");
 
-			this.mockMvc.perform(put("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/update")
+			this.mockMvc.perform(put("/restaurants/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/update")
 					.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newRestaurant))
 					.header("Authorization", jwtResponse.getToken())).andExpect(status().isOk());
 		} catch (Exception e) {
@@ -120,7 +120,8 @@ class RestaurantControllerTest {
 		try {
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 
-			this.mockMvc.perform(delete("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete"))
+			this.mockMvc
+					.perform(delete("/restaurants/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete"))
 					.andExpect(status().isUnauthorized());
 		} catch (Exception e) {
 			fail(e);
@@ -135,7 +136,7 @@ class RestaurantControllerTest {
 
 			Restaurant newRestaurant = Utils.getAllRestaurants(this.mockMvc).get(0);
 
-			this.mockMvc.perform(delete("/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete")
+			this.mockMvc.perform(delete("/restaurants/api/v1/restaurant/" + newRestaurant.getRestaurantId() + "/delete")
 					.header("Authorization", jwtResponse.getToken())).andExpect(status().isNoContent());
 		} catch (Exception e) {
 			fail(e);
@@ -149,7 +150,7 @@ class RestaurantControllerTest {
 			JwtResponse jwtResponse = Utils.obtainAccessToken(this.mockMvc, "sa", "password");
 
 			this.mockMvc
-					.perform(post("/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
+					.perform(post("/restaurants/api/v1/restaurant/save").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"name\":\"\"}").header("Authorization", jwtResponse.getToken()))
 					.andExpect(status().isBadRequest());
 
