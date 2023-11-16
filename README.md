@@ -1,6 +1,6 @@
 # restaurants
 
-API documentation provided by swagger: <a href="https://mkhardy.uk.to/restaurants/swagger-ui/">mkhardy.uk.to/restaurants/swagger-ui/</a>
+API documentation provided by swagger: <a href="https://mkhardy.uk.to/restaurants/swagger-ui/" target="_blank">mkhardy.uk.to/restaurants/swagger-ui/</a>
 <br>
 <br>
 Sys_admin username and password: <b>sa / password</b>
