@@ -3,6 +3,9 @@ package restaurants.config;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -24,11 +27,14 @@ public class SwaggerConfig {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
+	@Autowired
+	private ServletContext context;
+
 	@Bean
 	public Docket api() {
 		Docket docket = new Docket(DocumentationType.SWAGGER_2).securityContexts(Arrays.asList(securityContext()))
 				.securitySchemes(Arrays.asList(apiKey())).select().apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.regex("/restaurants/api/v1/.*")).build();
+				.paths(PathSelectors.regex(context.getContextPath() + "/api/v1/.*")).build();
 
 		return docket;
 	}

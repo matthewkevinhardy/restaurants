@@ -28,7 +28,7 @@ import restaurants.component.TableComponentImpl;
 import restaurants.model.RestaurantTable;
 
 @RestController
-@RequestMapping("/restaurants/api/v1")
+@RequestMapping("/api/v1")
 public class TableController {
 
 	@Autowired
