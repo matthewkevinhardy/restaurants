@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/restaurants/api/v1")
+@RequestMapping("/api/v1")
 public class JwtAuthController {
 
 	@Autowired
